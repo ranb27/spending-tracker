@@ -1,3 +1,5 @@
+import FetchDataSteps from "@/components/tutorial/fetch-data-steps";
+
 import { resetPasswordAction } from "@/app/actions";
 import { FormMessage, Message } from "@/components/form-message";
 import { SubmitButton } from "@/components/submit-button";
