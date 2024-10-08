@@ -7,6 +7,7 @@ import Link from "next/link";
 import "./globals.css";
 import NavBottom from "@/components/nav-bottom";
 import { Poppins } from "next/font/google";
+import { createClient } from "@/utils/supabase/server";
 
 import type { Metadata, Viewport } from "next";
 
@@ -43,11 +44,14 @@ const poppins = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 });
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const {
+    data: { user },
+  } = await createClient().auth.getUser();
   return (
     <html lang="en" className={`${poppins.variable}`} suppressHydrationWarning>
       <head>
@@ -80,8 +84,8 @@ export default function RootLayout({
         >
           <main className="min-h-screen flex flex-col items-center">
             <div className="flex-1 w-full flex flex-col gap-20 items-center">
-              <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16 fixed">
-                <div className="w-full max-w-5xl mx-8 flex justify-between items-center p-3 text-sm">
+              <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16 fixed bg-base-100 z-50">
+                <div className="w-full max-w-5xl mx-2 flex justify-between items-center p-3 text-sm">
                   <div className="flex gap-5 items-center font-semibold">
                     <Link href={"/"} className="flex gap-1">
                       <svg
@@ -110,8 +114,22 @@ export default function RootLayout({
                 {children}
               </div>
 
-              <footer className="w-full flex items-center justify-center border-t mx-auto text-center text-xs gap-8 py-4 absolute bottom-4">
-                <NavBottom />
+              <footer className="w-full flex items-center justify-center mx-auto text-center text-xs gap-8 py-4 absolute bottom-4">
+                {user ? (
+                  <NavBottom />
+                ) : (
+                  <p className="fixed mb-4 bottom-0 left-0 right-0 z-50">
+                    Developed by{" "}
+                    <a
+                      href="https://github.com/ranb27"
+                      target="_blank"
+                      className="font-bold hover:underline"
+                      rel="noreferrer"
+                    >
+                      Ranb27
+                    </a>
+                  </p>
+                )}
               </footer>
             </div>
           </main>

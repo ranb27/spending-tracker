@@ -4,32 +4,32 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ScrollText, HandCoins, ChartPie } from "lucide-react";
 
-const NavBottom = () => {
+export default async function NavBottom() {
   const pathname = usePathname();
 
   const navItems = [
     {
       name: "Spend",
-      href: "/spend",
+      href: "/protected/spend",
       icon: HandCoins,
     },
     {
       name: "Track",
-      href: "/track",
+      href: "/protected/track",
       icon: ScrollText,
     },
     {
       name: "Analyst",
-      href: "/analyst",
+      href: "/protected/analyst",
       icon: ChartPie,
     },
   ];
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50">
+    <div className="fixed mb-4 bottom-0 left-0 right-0 z-50">
       <nav className="bg-background border-t border-border/40 backdrop-blur">
         <div className="mx-auto max-w-xs">
-          <ul className="flex justify-around p-2 gap-4">
+          <ul className="flex justify-around p-2 gap-1">
             {navItems.map((item) => {
               const isActive = pathname === item.href;
               return (
@@ -37,9 +37,9 @@ const NavBottom = () => {
                   <Link
                     href={item.href}
                     target="_self"
-                    className={`flex flex-col items-center gap-1 py-2 px-2 text-sm rounded-xl transition-all duration-500 ${
+                    className={`flex flex-col items-center gap-1 py-2 px-2 text-sm rounded-xl transition-all duration-300 ${
                       isActive
-                        ? "text-primary bg-primary/10 shadow-sm"
+                        ? "text-neutral-content bg-neutral shadow-sm"
                         : "text-muted-foreground hover:text-primary hover:bg-primary/5"
                     }`}
                   >
@@ -53,6 +53,4 @@ const NavBottom = () => {
       </nav>
     </div>
   );
-};
-
-export default NavBottom;
+}

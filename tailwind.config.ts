@@ -72,8 +72,20 @@ const config = {
           "50%": { height: "3.125rem" },
           "100%": { height: "0.625rem" },
         },
+        "fade-in": {
+          "0%": {
+            opacity: "0",
+            transform: "translateY(10px)",
+          },
+          "100%": {
+            opacity: "1",
+            transform: "translateY(0)",
+          },
+        },
       },
       animation: {
+        "fade-in": "fade-in 1s ease-out",
+        "fade-in-delay": "fade-in 1s ease-out 0.5s forwards",
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "loading-wave": "loading-wave 1s ease-in-out infinite",
