@@ -67,10 +67,16 @@ const config = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        "loading-wave": {
+          "0%": { height: "0.625rem" },
+          "50%": { height: "3.125rem" },
+          "100%": { height: "0.625rem" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "loading-wave": "loading-wave 1s ease-in-out infinite",
       },
     },
     fontFamily: {
@@ -79,6 +85,9 @@ const config = {
   },
 
   plugins: [require("daisyui")],
+  daisyui: {
+    themes: ["lofi", "black"],
+  },
 } satisfies Config;
 
 export default config;

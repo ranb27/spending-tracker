@@ -5,8 +5,9 @@ import { hasEnvVars } from "@/utils/supabase/check-env-vars";
 import { ThemeProvider } from "next-themes";
 import Link from "next/link";
 import "./globals.css";
+import NavBottom from "@/components/nav-bottom";
 import { Poppins } from "next/font/google";
-import Image from "next/image";
+
 import type { Metadata, Viewport } from "next";
 
 const defaultUrl = process.env.VERCEL_URL
@@ -110,17 +111,7 @@ export default function RootLayout({
               </div>
 
               <footer className="w-full flex items-center justify-center border-t mx-auto text-center text-xs gap-8 py-4 absolute bottom-4">
-                <p>
-                  Developed by{" "}
-                  <a
-                    href="https://github.com/ranb27"
-                    target="_blank"
-                    className="font-bold hover:underline"
-                    rel="noreferrer"
-                  >
-                    Ranb27
-                  </a>
-                </p>
+                <NavBottom />
               </footer>
             </div>
           </main>
