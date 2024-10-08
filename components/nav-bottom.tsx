@@ -26,8 +26,8 @@ export default async function NavBottom() {
   ];
 
   return (
-    <div className="fixed mb-4 bottom-0 left-0 right-0 z-50">
-      <nav className="bg-background border-t border-border/40 backdrop-blur">
+    <div className="fixed bottom-0 left-0 right-0 z-50">
+      <nav className="bg-background border-t border-border/40 backdrop-blur pb-4">
         <div className="mx-auto max-w-xs">
           <ul className="flex justify-around p-2 gap-1">
             {navItems.map((item) => {

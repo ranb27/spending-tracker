@@ -25,7 +25,7 @@ export default async function Index() {
                 tracker
               </p>
               <div className="flex justify-center gap-4 mt-8">
-                <Link href="/sign-up" target="_self" className="flex">
+                <Link href="/protected/spend" target="_self" className="flex">
                   <button className="py-2 px-4 text-sm bg-black dark:bg-white text-white active:scale-95 dark:text-black rounded-full font-semibold hover:bg-info dark:hover:bg-info/75 transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-2">
                     Get Started <ArrowRight className="w-5 h-5" />
                   </button>
