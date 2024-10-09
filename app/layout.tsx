@@ -54,7 +54,7 @@ export default async function RootLayout({
   } = await createClient().auth.getUser();
   return (
     <html lang="en" className={`${poppins.variable}`} suppressHydrationWarning>
-      <head>
+      <head className="bg-base-100">
         <link rel="icon" href="/favicon.ico" />
         <link
           rel="apple-touch-icon"
