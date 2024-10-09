@@ -98,32 +98,6 @@ export default async function RootLayout({
         >
           <main className="min-h-screen flex flex-col items-center">
             <div className="flex-1 w-full flex flex-col gap-20 items-center">
-              {/* <nav className="w-full flex justify-center h-16 fixed bg-transparent z-50">
-                <div className="w-full max-w-5xl mx-2 flex justify-between items-center p-3 text-sm">
-                  <div className="flex gap-5 items-center font-semibold">
-                    <Link href={"/"} className="flex gap-1">
-                      <svg
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        height="auto"
-                        width="2.5em"
-                      >
-                        <path d="M6 21H3a1 1 0 01-1-1v-8a1 1 0 011-1h3a1 1 0 011 1v8a1 1 0 01-1 1zm7 0h-3a1 1 0 01-1-1V3a1 1 0 011-1h3a1 1 0 011 1v17a1 1 0 01-1 1zm7 0h-3a1 1 0 01-1-1V9a1 1 0 011-1h3a1 1 0 011 1v11a1 1 0 01-1 1z" />
-                      </svg>
-                      <span className="my-auto text-balance sm:block hidden">
-                        Spending Tracker
-                      </span>
-                    </Link>
-                  </div>
-                  <div className="flex gap-2">
-                    {!hasEnvVars ? <EnvVarWarning /> : <HeaderAuth />}
-
-                    <div className="my-auto">
-                      <ThemeSwitcher />
-                    </div>
-                  </div>
-                </div>
-              </nav> */}
               <div className="flex flex-col gap-20 max-w-5xl p-5 w-full h-full min-h-screen">
                 {children}
               </div>

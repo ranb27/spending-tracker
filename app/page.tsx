@@ -7,7 +7,7 @@ export default async function Index() {
   return (
     <>
       <main className="flex-1 flex flex-col h-full bg-gradient-to-br">
-        <div className="flex-1 flex flex-col items-center justify-center px-4 my-16 sm:px-6 lg:px-8">
+        <div className="flex-1 flex flex-col items-center justify-center px-4 my-8 sm:px-6 lg:px-8">
           <div className="w-full max-w-3xl space-y-12">
             {/* Hero Section */}
             <div className="text-center space-y-6">
@@ -16,7 +16,7 @@ export default async function Index() {
                   <div className="w-48 h-48 bg-info rounded-full filter blur-3xl opacity-20 animate-pulse"></div>
                 </div>
                 <h1 className="relative text-4xl sm:text-6xl font-bold text-gray-900 dark:text-white tracking-tight animate-fade-in">
-                  Smart Money Tracking
+                  Money Tracking
                   <span className="block text-info">Made Simple</span>
                 </h1>
               </div>
@@ -34,7 +34,7 @@ export default async function Index() {
             </div>
 
             {/* Features Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-16">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <FeatureCard
                 icon={<PiggyBank className="w-10 h-10 text-info" />}
                 title="Save Money"
@@ -68,13 +68,15 @@ function FeatureCard({
   description: string;
 }) {
   return (
-    <div className="w-full bg-base-100 dark:bg-gray-800 shadow-lg p-9 space-y-3 relative overflow-hidden group hover:scale-105 transition-all duration-300">
-      <div className="fill-info dark:fill-info/50 w-12 transform transition-transform duration-300 group-hover:scale-110">
-        {icon}
+    <div className="w-full card bg-base-100 dark:bg-gray-800 shadow-lg p-4 lg:p-9 space-y-3 relative overflow-hidden group hover:scale-105 transition-all duration-300">
+      <div className="flex gap-2">
+        <div className="fill-info dark:fill-info/50 w-12 transform transition-transform duration-300 group-hover:scale-110">
+          {icon}
+        </div>
+        <h1 className="font-bold text-xl text-gray-900 dark:text-white my-auto">
+          {title}
+        </h1>
       </div>
-      <h1 className="font-bold text-xl text-gray-900 dark:text-white">
-        {title}
-      </h1>
       <p className="text-sm text-gray-500 dark:text-gray-400 leading-6">
         {description}
       </p>
