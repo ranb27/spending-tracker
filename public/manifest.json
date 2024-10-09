@@ -1,7 +1,10 @@
 {
   "name": "Spending Tracker",
-  "short_name": "Spending Tracker",
+  "short_name": "Spending",
+  "theme_color": "#000000",
+  "background_color": "#000000",
   "description": "A simple spending tracker progessive web app",
+  "scope": "/",
   "start_url": "/",
   "display": "standalone",
   "orientation": "portrait",

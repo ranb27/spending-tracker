@@ -20,7 +20,7 @@ export default async function Index() {
                   <span className="block text-info">Made Simple</span>
                 </h1>
               </div>
-              <p className="text-xl text-gray-600 dark:text-gray-300 animate-fade-in-delay">
+              <p className="text-xl text-gray-600 dark:text-gray-300 animate-fade-in">
                 Take control of your finances with our intuitive spending
                 tracker
               </p>

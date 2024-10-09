@@ -18,6 +18,12 @@ const config = {
       },
     },
     extend: {
+      spacing: {
+        "safe-top": "env(safe-area-inset-top)",
+        "safe-bottom": "env(safe-area-inset-bottom)",
+        "safe-left": "env(safe-area-inset-left)",
+        "safe-right": "env(safe-area-inset-right)",
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -85,7 +91,7 @@ const config = {
       },
       animation: {
         "fade-in": "fade-in 1s ease-out",
-        "fade-in-delay": "fade-in 1s ease-out 0.5s forwards",
+        "fade-in-delay": "fade-in 1s ease-out 0.5s",
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "loading-wave": "loading-wave 1s ease-in-out infinite",
