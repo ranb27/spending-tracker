@@ -55,6 +55,11 @@ export default async function RootLayout({
   return (
     <html lang="en" className={`${poppins.variable}`} suppressHydrationWarning>
       <head className="bg-base-100">
+        <meta name="theme-color" content="#yourColorHex" />
+        <meta
+          name="apple-mobile-web-app-status-bar-style"
+          content="black-translucent"
+        />
         <link rel="icon" href="/favicon.ico" />
         <link
           rel="apple-touch-icon"
@@ -75,6 +80,7 @@ export default async function RootLayout({
         />
         <link rel="manifest" href="/site.webmanifest" />
       </head>
+
       <body className="bg-background text-foreground">
         <ThemeProvider
           attribute="class"

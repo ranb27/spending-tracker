@@ -67,3 +67,8 @@
     @apply bg-background text-foreground;
   }
 }
+
+body {
+  padding-top: env(safe-area-inset-top);
+  background-color: oklch(var(--b1));
+}
