@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     title: "Spending Tracker",
     startupImage: [
       {
-        url: "/splash/apple-splash-2048-2732.jpg",
+        url: "/apple-touch-icon.png",
         media:
           "(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)",
       },
