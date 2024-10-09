@@ -2,11 +2,18 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ScrollText, HandCoins, ChartPie } from "lucide-react";
+import { ScrollText, HandCoins, ChartPie, User } from "lucide-react";
+import { ThemeSwitcher } from "@/components/theme-switcher";
+import { signOutAction } from "@/app/actions";
 
-export default async function NavBottom() {
+interface NavBottomProps {
+  user?: {
+    email?: string | null;
+  } | null;
+}
+
+export default function NavBottom({ user }: NavBottomProps) {
   const pathname = usePathname();
-
   const navItems = [
     {
       name: "Spend",
@@ -23,36 +30,97 @@ export default async function NavBottom() {
       href: "/protected/analyst",
       icon: ChartPie,
     },
+    {
+      name: "Account",
+      href: "#",
+      icon: User,
+    },
   ];
 
   return (
-    <footer className="w-full flex items-center justify-center mx-auto text-center text-xs gap-8 py-4 absolute bottom-4">
-      <div className="fixed bottom-0 left-0 right-0 z-50">
-        <nav className="bg-background border-t border-border/40 backdrop-blur pb-4">
-          <div className="mx-auto max-w-xs">
-            <ul className="flex justify-around p-2 gap-1">
-              {navItems.map((item) => {
-                const isActive = pathname === item.href;
-                return (
-                  <li key={item.name} className="flex-1">
-                    <Link
-                      href={item.href}
-                      target="_self"
-                      className={`flex flex-col items-center gap-1 py-2 px-2 text-sm rounded-xl transition-all duration-300 ${
+    <div className="fixed inset-x-0 bottom-0 z-50">
+      {/* Main Navigation */}
+      <nav className="bg-base-100/80 backdrop-blur-lg border-t border-base-300 pb-4">
+        <ul className="flex justify-around pb-safe-bottom">
+          {navItems.map((item) => {
+            const isActive = pathname === item.href;
+            return (
+              <li key={item.name} className="flex-1">
+                {item.name === "Account" ? (
+                  <div className="dropdown dropdown-top dropdown-end w-full">
+                    <label
+                      tabIndex={0}
+                      className={`flex flex-col items-center py-1 px-2 w-full ${
                         isActive
-                          ? "text-neutral-content bg-neutral shadow-sm"
-                          : "text-muted-foreground hover:text-primary hover:bg-primary/5"
+                          ? "text-primary"
+                          : "text-base-content/60 active:text-primary"
                       }`}
                     >
-                      <item.icon className={`h-6 w-6 ${isActive ? "" : ""}`} />
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        </nav>
-      </div>
-    </footer>
+                      <item.icon className="h-6 w-6 mb-1" />
+                      <span className="text-[10px]">{item.name}</span>
+                    </label>
+                    <div
+                      tabIndex={0}
+                      className="dropdown-content menu bg-base-100 rounded-box shadow-lg w-full min-w-56 m-2 overflow-hidden"
+                    >
+                      <div className="bg-base-200 px-4 py-2 flex items-center justify-between rounded-lg">
+                        <span className="text-sm font-medium">
+                          {user ? user.email?.split("@")[0] : "Guest"}
+                        </span>
+                        <ThemeSwitcher />
+                      </div>
+                      <ul className="py-1">
+                        <li>
+                          <Link href="/" className="py-2 px-4">
+                            Home
+                          </Link>
+                        </li>
+                        {user ? (
+                          <li>
+                            <form action={signOutAction}>
+                              <button
+                                type="submit"
+                                className="w-full text-left py-2 px-4 text-error"
+                              >
+                                Sign out
+                              </button>
+                            </form>
+                          </li>
+                        ) : (
+                          <>
+                            <li>
+                              <Link href="/sign-in" className="py-2 px-4">
+                                Sign in
+                              </Link>
+                            </li>
+                            <li>
+                              <Link href="/sign-up" className="py-2 px-4">
+                                Sign up
+                              </Link>
+                            </li>
+                          </>
+                        )}
+                      </ul>
+                    </div>
+                  </div>
+                ) : (
+                  <Link
+                    href={item.href}
+                    className={`flex flex-col items-center py-1 px-2 ${
+                      isActive
+                        ? "text-primary"
+                        : "text-base-content/60 active:text-primary"
+                    }`}
+                  >
+                    <item.icon className="h-6 w-6 mb-1" />
+                    <span className="text-[10px]">{item.name}</span>
+                  </Link>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      </nav>
+    </div>
   );
 }
