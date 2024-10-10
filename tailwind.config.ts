@@ -104,7 +104,7 @@ const config = {
 
   plugins: [require("daisyui")],
   daisyui: {
-    themes: ["lofi", "black"],
+    themes: ["light", "dark"],
     darkTheme: "dark",
     base: true, // applies background color and foreground color for root element by default
     styled: true, // include daisyUI colors and design decisions for all components

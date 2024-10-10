@@ -61,7 +61,7 @@ export default async function RootLayout({
   } = await createClient().auth.getUser();
   return (
     <html lang="en" className={`${poppins.variable}`} suppressHydrationWarning>
-      <head className="bg-base-100">
+      <head>
         <meta name="theme-color" content="#000000" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta
@@ -89,7 +89,7 @@ export default async function RootLayout({
         <link rel="manifest" href="/site.webmanifest" />
       </head>
 
-      <body className="bg-background text-foreground">
+      <body className="bg-base-200/50 text-base-content">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

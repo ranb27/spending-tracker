@@ -13,9 +13,9 @@ const ThemeSwitcher = () => {
   useEffect(() => {
     setMounted(true);
     if (theme === "light") {
-      document.documentElement.setAttribute("data-theme", "lofi");
+      document.documentElement.setAttribute("data-theme", "light");
     } else if (theme === "dark") {
-      document.documentElement.setAttribute("data-theme", "black");
+      document.documentElement.setAttribute("data-theme", "dark");
     }
   }, [theme]);
 
@@ -28,7 +28,7 @@ const ThemeSwitcher = () => {
     setTheme(newTheme);
     document.documentElement.setAttribute(
       "data-theme",
-      newTheme === "light" ? "lofi" : "black"
+      newTheme === "light" ? "light" : "dark"
     );
   };
 

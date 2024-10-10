@@ -1,5 +1,4 @@
 "use client";
-
 import * as React from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Tabs from "@mui/material/Tabs";
@@ -47,7 +46,13 @@ export default function NavBottom({ user }: NavBottomProps) {
   const router = useRouter();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
-  const currentTabIndex = navItems.findIndex((item) => item.href === pathname);
+  // Modified tab index calculation
+  const getCurrentTabIndex = () => {
+    if (pathname === "/") return -1; // Return -1 for home path
+    return navItems.findIndex((item) => item.href === pathname);
+  };
+
+  const currentTabIndex = getCurrentTabIndex();
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     if (newValue === 3) {
@@ -74,7 +79,7 @@ export default function NavBottom({ user }: NavBottomProps) {
     >
       <Paper elevation={3}>
         <Tabs
-          value={currentTabIndex === -1 ? 0 : currentTabIndex}
+          value={currentTabIndex === -1 ? false : currentTabIndex}
           onChange={handleChange}
           aria-label="navigation tabs"
           variant="fullWidth"
@@ -106,7 +111,6 @@ export default function NavBottom({ user }: NavBottomProps) {
           })}
         </Tabs>
       </Paper>
-
       <Menu
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
@@ -121,11 +125,11 @@ export default function NavBottom({ user }: NavBottomProps) {
         }}
         sx={{
           "& .MuiPaper-root": {
-            backgroundColor: "oklch(var(--b2))",
+            backgroundColor: "oklch(var(--b1))",
             color: "oklch(var(--bc))",
             width: "auto",
             minWidth: "25%",
-            boxShadow: "none",
+            boxShadow: "0 0 10px 0 rgba(0, 0, 0, 0.1)",
             borderRadius: "1rem",
             padding: "0.5rem",
           },
