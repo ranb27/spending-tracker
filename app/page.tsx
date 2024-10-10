@@ -6,7 +6,7 @@ import Link from "next/link";
 export default async function Index() {
   return (
     <>
-      <main className="flex-1 flex flex-col h-full bg-gradient-to-br">
+      <main className="flex-1 flex flex-col h-full bg-gradient-to-br mt-16">
         <div className="flex-1 flex flex-col items-center justify-center px-4 my-8 sm:px-6 lg:px-8">
           <div className="w-full max-w-3xl space-y-12">
             {/* Hero Section */}
@@ -68,7 +68,7 @@ function FeatureCard({
   description: string;
 }) {
   return (
-    <div className="w-full card bg-base-100 dark:bg-gray-800 shadow-lg p-4 lg:p-9 space-y-3 relative overflow-hidden group hover:scale-105 transition-all duration-300">
+    <div className="w-full card bg-base-100 dark:bg-gray-800 shadow-lg p-9 space-y-3 relative overflow-hidden group hover:scale-105 transition-all duration-300">
       <div className="flex gap-2">
         <div className="fill-info dark:fill-info/50 w-12 transform transition-transform duration-300 group-hover:scale-110">
           {icon}
