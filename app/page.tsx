@@ -6,7 +6,7 @@ import Link from "next/link";
 export default async function Index() {
   return (
     <>
-      <main className="flex-1 flex flex-col h-full bg-gradient-to-br mt-16">
+      <main className="flex-1 flex flex-col h-full bg-gradient-to-br my-16">
         <div className="flex-1 flex flex-col items-center justify-center px-4 my-8 sm:px-6 lg:px-8">
           <div className="w-full max-w-3xl space-y-12">
             {/* Hero Section */}
