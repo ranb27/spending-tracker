@@ -13,7 +13,7 @@ export default async function Index() {
             <div className="text-center space-y-6">
               <div className="relative">
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-48 h-48 bg-info rounded-full filter blur-3xl opacity-20 animate-pulse"></div>
+                  <div className="w-48 h-32 bg-info rounded-full filter blur-3xl opacity-20 animate-pulse"></div>
                 </div>
                 <h1 className="relative text-4xl sm:text-6xl font-bold text-gray-900 dark:text-white tracking-tight animate-fade-in">
                   Money Tracking
