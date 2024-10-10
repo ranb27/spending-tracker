@@ -83,6 +83,7 @@ export default function NavBottom({ user }: NavBottomProps) {
               backgroundColor: "oklch(var(--in))",
             },
             backgroundColor: "oklch(var(--b1))",
+            paddingBottom: "1rem",
           }}
         >
           {navItems.map((item, index) => {
