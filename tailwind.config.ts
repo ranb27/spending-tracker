@@ -24,46 +24,7 @@ const config = {
         "safe-left": "env(safe-area-inset-left)",
         "safe-right": "env(safe-area-inset-right)",
       },
-      colors: {
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
-        primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
-        },
-        secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
-        },
-        destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
-        },
-        muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
-        },
-        accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
-        },
-        popover: {
-          DEFAULT: "hsl(var(--popover))",
-          foreground: "hsl(var(--popover-foreground))",
-        },
-        card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
-        },
-      },
-      borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
-      },
+
       keyframes: {
         "accordion-down": {
           from: { height: "0" },
@@ -104,7 +65,37 @@ const config = {
 
   plugins: [require("daisyui")],
   daisyui: {
-    themes: ["light", "dark"],
+    themes: [
+      {
+        light: {
+          primary: "#6373b7",
+          secondary: "#bec9e7",
+          accent: "#ebe4f2",
+          neutral: "#374151",
+          "base-100": "#f3f4f6",
+          "base-200": "#e5e7eb",
+          "base-300": "#d1d5db",
+          info: "#60a5fa",
+          success: "#22c55e",
+          warning: "#eab308",
+          error: "#ef4444",
+        },
+        dark: {
+          primary: "#6373b7",
+          secondary: "#bec9e7",
+          accent: "#ebe4f2",
+          neutral: "#d1d5db",
+          "base-100": "#252f3f",
+          "base-200": "#1a2130",
+          "base-300": "#151a27",
+          info: "#60a5fa",
+          success: "#22c55e",
+          warning: "#eab308",
+          error: "#ef4444",
+        },
+      },
+    ],
+
     darkTheme: "dark",
     base: true, // applies background color and foreground color for root element by default
     styled: true, // include daisyUI colors and design decisions for all components

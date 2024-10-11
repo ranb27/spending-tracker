@@ -8,6 +8,7 @@ import "./globals.css";
 import NavBottom from "@/components/nav-bottom";
 import { Poppins } from "next/font/google";
 import { createClient } from "@/utils/supabase/server";
+import { UserProvider } from "./user";
 
 import type { Metadata, Viewport } from "next";
 
@@ -60,7 +61,12 @@ export default async function RootLayout({
     data: { user },
   } = await createClient().auth.getUser();
   return (
-    <html lang="en" className={`${poppins.variable}`} suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`${poppins.variable}`}
+      suppressHydrationWarning
+      data-theme="light"
+    >
       <head>
         <meta name="theme-color" content="#000000" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -90,24 +96,21 @@ export default async function RootLayout({
       </head>
 
       <body className="bg-base-200/50 text-base-content">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <main className="min-h-screen flex flex-col items-center">
-            <div className="flex-1 w-full flex flex-col gap-20 items-center">
-              <div className="flex flex-col gap-20 max-w-5xl p-5 w-full h-full min-h-screen">
-                {children}
-              </div>
+        <UserProvider initialUser={user}>
+          <ThemeProvider attribute="data-theme">
+            <main className="min-h-screen flex flex-col items-center">
+              <div className="flex-1 w-full flex flex-col gap-20 items-center">
+                <div className="flex flex-col gap-20 max-w-5xl p-5 w-full h-full min-h-screen">
+                  {children}
+                </div>
 
-              <footer className="w-full flex items-center justify-center mx-auto text-center text-xs gap-8 py-4 absolute bottom-4">
-                {user ? <NavBottom user={user} /> : null}
-              </footer>
-            </div>
-          </main>
-        </ThemeProvider>
+                <footer className="w-full flex items-center justify-center mx-auto text-center text-xs gap-8 py-4 absolute bottom-4">
+                  {user ? <NavBottom user={user} /> : null}
+                </footer>
+              </div>
+            </main>
+          </ThemeProvider>
+        </UserProvider>
       </body>
     </html>
   );

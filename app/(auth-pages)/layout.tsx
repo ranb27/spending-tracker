@@ -7,7 +7,7 @@ export default async function Layout({
 }) {
   return (
     <div className="max-w-7xl flex flex-col gap-12 items-start my-auto">
-      <button className="btn btn-xs btn-link text-foreground rounded absolute top-4">
+      <button className="btn btn-xs btn-link text-base-content rounded absolute top-4">
         <Link href={"/"} className="flex gap-1">
           <svg
             viewBox="0 0 512 512"

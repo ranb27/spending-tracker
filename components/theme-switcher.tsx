@@ -1,23 +1,38 @@
 "use client";
-
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 
 const ThemeSwitcher = () => {
   const [mounted, setMounted] = useState(false);
-  const { theme, setTheme } = useTheme();
-  const ICON_SIZE = 16;
+  const { theme, setTheme, systemTheme } = useTheme();
 
-  // useEffect only runs on the client, so now we can safely show the UI
+  // Effect to handle initial theme setup
   useEffect(() => {
-    setMounted(true);
-    if (theme === "light") {
-      document.documentElement.setAttribute("data-theme", "light");
-    } else if (theme === "dark") {
-      document.documentElement.setAttribute("data-theme", "dark");
+    // Get the stored theme from localStorage
+    const storedTheme = localStorage.getItem("theme");
+
+    if (!storedTheme) {
+      // If no theme is stored, use system preference
+      const prefersDark = window.matchMedia(
+        "(prefers-color-scheme: dark)"
+      ).matches;
+      setTheme(prefersDark ? "dark" : "light");
+    } else {
+      // Ensure the stored theme is applied
+      setTheme(storedTheme);
+      document.documentElement.setAttribute("data-theme", storedTheme);
     }
-  }, [theme]);
+
+    setMounted(true);
+  }, [setTheme]);
+
+  useEffect(() => {
+    if (mounted && theme) {
+      document.documentElement.setAttribute("data-theme", theme);
+      localStorage.setItem("theme", theme);
+    }
+  }, [theme, mounted]);
 
   if (!mounted) {
     return null;
@@ -26,26 +41,17 @@ const ThemeSwitcher = () => {
   const toggleTheme = () => {
     const newTheme = theme === "light" ? "dark" : "light";
     setTheme(newTheme);
-    document.documentElement.setAttribute(
-      "data-theme",
-      newTheme === "light" ? "light" : "dark"
-    );
   };
 
   return (
     <label className="swap swap-rotate">
-      {/* Hidden checkbox controls the swap state */}
       <input
         type="checkbox"
         className="theme-controller"
         checked={theme === "dark"}
         onChange={toggleTheme}
       />
-
-      {/* Sun icon */}
       <Sun className="swap-on text-muted-foreground w-4 h-4" />
-
-      {/* Moon icon */}
       <Moon className="swap-off text-muted-foreground w-4 h-4" />
     </label>
   );

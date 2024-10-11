@@ -140,11 +140,12 @@ export default function NavBottom({ user }: NavBottomProps) {
           <span>{user ? user.email : "Guest"}</span>
           <ThemeSwitcher />
         </div>
+        <div className="divider"></div>
         <MenuItem onClick={() => router.push("/")}>Home</MenuItem>
         {user ? (
           <MenuItem
             onClick={() => signOutAction()}
-            sx={{ color: "error.main" }}
+            sx={{ color: "oklch(var(--er))" }}
           >
             Sign out
           </MenuItem>

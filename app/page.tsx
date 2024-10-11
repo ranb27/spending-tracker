@@ -8,25 +8,25 @@ export default async function Index() {
     <>
       <main className="flex-1 flex flex-col h-full bg-gradient-to-br my-16">
         <div className="flex-1 flex flex-col items-center justify-center px-4 my-8 sm:px-6 lg:px-8">
-          <div className="w-full max-w-3xl space-y-12">
+          <div className="w-full max-w-4xl space-y-12">
             {/* Hero Section */}
             <div className="text-center space-y-6">
               <div className="relative">
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-48 h-32 bg-info rounded-full filter blur-3xl opacity-20 animate-pulse"></div>
+                  <div className="w-48 h-32 bg-info rounded-full filter blur-3xl opacity-20"></div>
                 </div>
-                <h1 className="relative text-4xl sm:text-6xl font-bold text-gray-900 dark:text-white tracking-tight animate-fade-in">
+                <h1 className="relative text-4xl sm:text-6xl font-bold text-base-content tracking-tight animate-fade-in">
                   Money Tracking
-                  <span className="block text-info">Made Simple</span>
+                  <span className="block text-primary">Made Simple</span>
                 </h1>
               </div>
-              <p className="text-xl text-gray-600 dark:text-gray-300 animate-fade-in">
+              <p className="text-xl text-base-content/75 animate-fade-in">
                 Take control of your finances with our intuitive spending
                 tracker
               </p>
               <div className="flex justify-center gap-4 mt-8">
                 <Link href="/protected/spend" target="_self" className="flex">
-                  <button className="py-2 px-4 text-sm bg-black dark:bg-white text-white active:scale-95 dark:text-black rounded-full font-semibold hover:bg-info dark:hover:bg-info/75 transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-2">
+                  <button className="py-2 px-4 text-sm active:scale-95 text-neutral-content bg-neutral rounded-full font-semibold hover:bg-info transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-2">
                     Get Started <ArrowRight className="w-5 h-5" />
                   </button>
                 </Link>
@@ -68,18 +68,14 @@ function FeatureCard({
   description: string;
 }) {
   return (
-    <div className="w-full card bg-base-100 dark:bg-gray-800 shadow-lg p-9 space-y-3 relative overflow-hidden group hover:scale-105 transition-all duration-300">
+    <div className="w-full card bg-base-100 shadow-lg p-9 space-y-3 relative overflow-hidden group hover:scale-105 transition-all duration-300">
       <div className="flex gap-2">
         <div className="fill-info dark:fill-info/50 w-12 transform transition-transform duration-300 group-hover:scale-110">
           {icon}
         </div>
-        <h1 className="font-bold text-xl text-gray-900 dark:text-white my-auto">
-          {title}
-        </h1>
+        <h1 className="font-bold text-xl text-base-content my-auto">{title}</h1>
       </div>
-      <p className="text-sm text-gray-500 dark:text-gray-400 leading-6">
-        {description}
-      </p>
+      <p className="text-sm text-base-content/75 leading-6">{description}</p>
     </div>
   );
 }
