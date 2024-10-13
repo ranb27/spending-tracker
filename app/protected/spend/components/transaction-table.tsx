@@ -11,7 +11,7 @@ export default function transactionTable({
 }) {
   return (
     <div className="card-body">
-      <div className="overflow-x-auto h-56">
+      <div className="overflow-x-auto h-44 w-full">
         <table className="table">
           <thead>
             <tr>

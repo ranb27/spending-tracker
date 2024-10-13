@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import TransactionTable from "./components/transaction-table";
 import { useUser } from "@/app/user";
 import { getClient } from "@/utils/supabase/client";
+import Loading from "@/components/ui/loading";
 
 type TransactionFormValues = {
   amount: number;
@@ -79,103 +80,108 @@ function Page() {
   };
 
   return (
-    <div className="grid grid-cols-1 gap-4 my-auto pb-16">
-      {/* Spending */}
-      <div className="card bg-base-100 shadow-lg rounded-xl">
-        <div className="card-body">
-          <h2 className="card-title">Transaction</h2>
+    <>
+      {isLoading && <Loading />}
+      <div className="grid grid-cols-1 gap-4 my-auto pb-16">
+        {/* Spending */}
+        <div className="card bg-base-100 shadow-lg rounded-xl">
+          <div className="card-body">
+            <h2 className="card-title">Transaction</h2>
 
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="grid grid-cols-1 gap-2"
-          >
-            <input
-              type="number"
-              id="amount"
-              {...register("amount", { required: "Amount is required" })}
-              placeholder="Amount"
-              className="input w-full"
-            />
-            {errors.amount && (
-              <p className="text-red-500 text-sm">{errors.amount.message}</p>
-            )}
-
-            <input
-              type="text"
-              id="description"
-              {...register("description", {
-                required: "Description is required",
-              })}
-              placeholder="Description"
-              className="input w-full"
-            />
-            {errors.description && (
-              <p className="text-red-500 text-sm">
-                {errors.description.message}
-              </p>
-            )}
-
-            <label className="cursor-pointer label px-0">
-              <span className="label-text font-semibold text-primary">
-                Income
-              </span>
-              <input
-                type="checkbox"
-                {...register("is_income")}
-                className="checkbox checkbox-success"
-              />
-            </label>
-
-            <select
-              {...register("category", { required: "Category is required" })}
-              id="categories"
-              className="select w-full"
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="grid grid-cols-1 gap-2"
             >
-              {isIncome ? (
-                <>
-                  <option value="salary">Salary</option>
-                  <option value="bonus">Bonus</option>
-                </>
-              ) : (
-                <>
-                  <option value="fixed cost">Fixed Cost</option>
-                  <option value="credit">Credit</option>
-                  <option value="shopping">Shopping</option>
-                </>
+              <input
+                type="number"
+                id="amount"
+                {...register("amount", { required: "Amount is required" })}
+                placeholder="Amount"
+                className="input w-full"
+              />
+              {errors.amount && (
+                <p className="text-red-500 text-sm">{errors.amount.message}</p>
               )}
-              <option value="other">Other</option>
-            </select>
-            {errors.category && (
-              <p className="text-red-500 text-sm">{errors.category.message}</p>
-            )}
 
-            <div className="grid grid-cols-2 gap-2">
-              <button
-                className="btn w-full btn-neutral"
-                type="button"
-                onClick={() => reset()}
+              <input
+                type="text"
+                id="description"
+                {...register("description", {
+                  required: "Description is required",
+                })}
+                placeholder="Description"
+                className="input w-full"
+              />
+              {errors.description && (
+                <p className="text-red-500 text-sm">
+                  {errors.description.message}
+                </p>
+              )}
+
+              <label className="cursor-pointer label px-0">
+                <span className="label-text font-semibold text-primary">
+                  Income
+                </span>
+                <input
+                  type="checkbox"
+                  {...register("is_income")}
+                  className="checkbox checkbox-success"
+                />
+              </label>
+
+              <select
+                {...register("category", { required: "Category is required" })}
+                id="categories"
+                className="select w-full"
               >
-                Reset
-              </button>
-              <button className="btn btn-primary w-full" type="submit">
-                Add
-              </button>
-            </div>
-          </form>
+                {isIncome ? (
+                  <>
+                    <option value="salary">Salary</option>
+                    <option value="bonus">Bonus</option>
+                  </>
+                ) : (
+                  <>
+                    <option value="fixed cost">Fixed Cost</option>
+                    <option value="credit">Credit</option>
+                    <option value="shopping">Shopping</option>
+                  </>
+                )}
+                <option value="other">Other</option>
+              </select>
+              {errors.category && (
+                <p className="text-red-500 text-sm">
+                  {errors.category.message}
+                </p>
+              )}
+
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  className="btn w-full btn-neutral"
+                  type="button"
+                  onClick={() => reset()}
+                >
+                  Reset
+                </button>
+                <button className="btn btn-primary w-full" type="submit">
+                  Add
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div className="card bg-base-100 shadow-lg rounded-xl">
+          <TransactionTable data={transactions} setData={setTransactions} />
+        </div>
+        <div className="flex justify-end gap-2">
+          <button onClick={() => setTransactions([])} className="btn">
+            Clear
+          </button>
+          <button onClick={handleInsert} className="btn btn-success">
+            Submit
+          </button>
         </div>
       </div>
-      <div className="card bg-base-100 shadow-lg rounded-xl">
-        <TransactionTable data={transactions} setData={setTransactions} />
-      </div>
-      <div className="flex justify-end gap-2">
-        <button onClick={() => setTransactions([])} className="btn">
-          Clear
-        </button>
-        <button onClick={handleInsert} className="btn btn-success">
-          Submit
-        </button>
-      </div>
-    </div>
+    </>
   );
 }
 
