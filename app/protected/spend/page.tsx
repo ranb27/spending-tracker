@@ -84,9 +84,11 @@ function Page() {
       {isLoading && <Loading />}
       <div className="grid grid-cols-1 gap-4 my-auto pb-16">
         {/* Spending */}
+        <h1 className="text-xl font-bold">Spend</h1>
+
         <div className="card bg-base-100 shadow-lg rounded-xl">
           <div className="card-body">
-            <h2 className="card-title">Transaction</h2>
+            <h2 className="card-title text-primary">Transaction</h2>
 
             <form
               onSubmit={handleSubmit(onSubmit)}
@@ -156,13 +158,13 @@ function Page() {
 
               <div className="grid grid-cols-2 gap-2">
                 <button
-                  className="btn w-full btn-neutral"
+                  className="btn w-full btn-neutral btn-sm"
                   type="button"
                   onClick={() => reset()}
                 >
                   Reset
                 </button>
-                <button className="btn btn-primary w-full" type="submit">
+                <button className="btn btn-primary btn-sm w-full" type="submit">
                   Add
                 </button>
               </div>
@@ -173,10 +175,10 @@ function Page() {
           <TransactionTable data={transactions} setData={setTransactions} />
         </div>
         <div className="flex justify-end gap-2">
-          <button onClick={() => setTransactions([])} className="btn">
+          <button onClick={() => setTransactions([])} className="btn btn-sm">
             Clear
           </button>
-          <button onClick={handleInsert} className="btn btn-success">
+          <button onClick={handleInsert} className="btn btn-success btn-sm">
             Submit
           </button>
         </div>

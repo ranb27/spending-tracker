@@ -137,6 +137,13 @@ export default function NavBottom({ user }: NavBottomProps) {
         }}
       >
         <div className="flex justify-between mx-4 gap-4">
+          <div className="avatar online placeholder">
+            <div className="bg-neutral text-neutral-content w-8 h-8 rounded-full">
+              <span className="text-sm">
+                {user ? user.email?.charAt(0).toUpperCase() : "G"}
+              </span>
+            </div>
+          </div>
           <span>{user ? user.email : "Guest"}</span>
           <ThemeSwitcher />
         </div>
