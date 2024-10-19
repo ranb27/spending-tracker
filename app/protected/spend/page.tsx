@@ -6,6 +6,7 @@ import TransactionTable from "./components/transaction-table";
 import { useUser } from "@/app/user";
 import { getClient } from "@/utils/supabase/client";
 import Loading from "@/components/ui/loading";
+import Swal from "sweetalert2";
 
 type TransactionFormValues = {
   amount: number;
@@ -43,16 +44,24 @@ function Page() {
   const handleInsert = async () => {
     if (transactions.length === 0) return;
 
-    //window promt to confirm aith alert
-
     setIsLoading(true);
     setError(null);
 
-    const isConfirmed = window.confirm(
-      "Are you sure you want to save these transactions?"
-    );
+    // SweetAlert confirmation
+    const isConfirmed = await Swal.fire({
+      icon: "warning",
+      title: "Are you sure?",
+      text: "Do you want to save these transactions?",
+      showCancelButton: true,
+      confirmButtonText: "Save",
+      cancelButtonText: "Cancel",
+      background: "oklch(var(--b1))",
+      color: "oklch(var(--bc))",
+      confirmButtonColor: "oklch(var(--su))",
+      cancelButtonColor: "oklch(var(--er))",
+    });
 
-    if (!isConfirmed) {
+    if (!isConfirmed.isConfirmed) {
       setIsLoading(false);
       return;
     }
@@ -71,9 +80,26 @@ function Page() {
       if (insertError) throw insertError;
 
       setTransactions([]);
+      Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: "Transactions saved successfully",
+        background: "oklch(var(--b1))",
+        color: "oklch(var(--bc))",
+        timer: 2000,
+        timerProgressBar: true,
+        showConfirmButton: false,
+      });
     } catch (err) {
       setError("Failed to save transactions. Please try again.");
       console.error("Error inserting data: ", err);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Failed to save transactions. Please try again.",
+        background: "oklch(var(--b1))",
+        color: "oklch(var(--bc))",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -82,7 +108,7 @@ function Page() {
   return (
     <>
       {isLoading && <Loading />}
-      <div className="grid grid-cols-1 gap-4 my-auto pb-16">
+      <div className="grid grid-cols-1 gap-4 pb-16">
         {/* Spending */}
         <h1 className="text-xl font-bold">Spend</h1>
 

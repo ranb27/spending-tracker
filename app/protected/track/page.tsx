@@ -1,36 +1,79 @@
 "use client";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { getClient } from "@/utils/supabase/client";
 import { useUser } from "@/app/user";
-import { Eraser } from "lucide-react";
-
+import { GridColDef, GridRowSelectionModel } from "@mui/x-data-grid";
 import Card from "./components/card";
+import Swal from "sweetalert2";
+import { CircleSlash, CircleX, TrendingUp, TrendingDown } from "lucide-react";
+import Loading from "@/components/ui/loading";
+import Table from "./components/table";
+import BalanceItem from "./components/balance-item";
 
-function page() {
+interface Transaction {
+  id: string;
+  created_at: string;
+  description: string;
+  amount: number;
+  paid: boolean;
+  is_income: boolean;
+  user: string;
+  category: string;
+}
+
+function Page() {
   //! State
   const { user } = useUser();
-  const [data, setData] = useState<any>([
+  const [data, setData] = useState<Transaction[]>([]);
+  const [balance, setBalance] = useState<number>(0);
+  const [overAllBalance, setOverAllBalance] = useState([
     {
-      created_at: null,
-      description: null,
-      amount: null,
-      paid: null,
-      is_income: null,
-      user: null,
-      category: null,
+      paid: 0,
+      unpaid: 0,
+      income: 0,
+      expense: 0,
     },
   ]);
+  const [selectedRows, setSelectedRows] = useState<GridRowSelectionModel>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const [balance, setBalance] = useState(0);
+  const now = new Date();
+  const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+  const lastDayOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+  //format DD-MM-YYYY
+  const dateRange = `${firstDayOfMonth.getDate()}-${firstDayOfMonth.getMonth() + 1}-${firstDayOfMonth.getFullYear()} to ${lastDayOfMonth.getDate()}-${lastDayOfMonth.getMonth() + 1}-${lastDayOfMonth.getFullYear()}`;
+
+  const renderBoolean = (params: any) => {
+    return (
+      <div className={`${params.value ? "text-success" : "opacity-25"}`}>
+        {params.value ? <CircleSlash size={24} /> : <CircleX size={24} />}
+      </div>
+    );
+  };
+
+  const columns: GridColDef[] = [
+    { field: "description", headerName: "Description", width: 200 },
+    { field: "amount", headerName: "Amount", width: 150 },
+    {
+      field: "paid",
+      headerName: "Paid",
+      width: 120,
+      type: "boolean",
+      renderCell: renderBoolean,
+    },
+    {
+      field: "is_income",
+      headerName: "Income",
+      width: 120,
+      type: "boolean",
+      renderCell: renderBoolean,
+    },
+    { field: "category", headerName: "Category", width: 150 },
+  ];
 
   //! Fetch
   const fetchCurrMonthData = async () => {
     const client = getClient();
-
-    // Get the first and last day of the current month
-    const now = new Date();
-    const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-    const lastDayOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
 
     const { data, error } = await client
       .from("spending_tracker_db")
@@ -47,123 +90,262 @@ function page() {
   };
 
   useEffect(() => {
-    fetchCurrMonthData();
+    if (user?.email) {
+      fetchCurrMonthData();
+    }
   }, [user?.email]);
 
-  console.log(data);
-
-  //! Function
-  const deleteTransaction = async (id: string) => {
-    const client = getClient();
-
-    const { error } = await client
-      .from("spending_tracker_db")
-      .delete()
-      .eq("id", id);
-
-    if (error) {
-      console.error(error);
-      return;
-    }
-
-    fetchCurrMonthData();
-  };
-
-  //updatePaid
-  const updatePaid = async (id: string) => {
-    const client = getClient();
-
-    const { error } = await client
-      .from("spending_tracker_db")
-      .update({ paid: true })
-      .eq("id", id);
-
-    if (error) {
-      console.error(error);
-      return;
-    }
-
-    fetchCurrMonthData();
-  };
-
+  //! Functions
+  // Balance
   useEffect(() => {
-    let income = 0;
-    let expense = 0;
-
-    data.reduce((acc: any, transaction: any) => {
-      if (transaction.is_income) {
-        income += transaction.amount;
-      } else {
-        expense += transaction.amount;
-      }
-    }, 0);
+    const { income, expense } = data.reduce(
+      (acc, transaction) => {
+        if (transaction.is_income) {
+          acc.income += transaction.amount;
+        } else {
+          acc.expense += transaction.amount;
+        }
+        return acc;
+      },
+      { income: 0, expense: 0 }
+    );
 
     setBalance(income - expense);
   }, [data]);
 
+  // OverAll Balance
+  useEffect(() => {
+    const { paid, unpaid, income, expense } = data.reduce(
+      (acc, transaction) => {
+        // Add to income or expense based on `is_income`
+        if (transaction.is_income) {
+          acc.income += transaction.amount;
+        } else {
+          acc.expense += transaction.amount;
+
+          // Only add to unpaid if it's not income
+          if (!transaction.paid) {
+            acc.unpaid += transaction.amount;
+          }
+        }
+
+        // Add to paid only if the transaction is paid (irrespective of income or expense)
+        if (transaction.paid) {
+          acc.paid += transaction.amount;
+        }
+
+        return acc;
+      },
+      { paid: 0, unpaid: 0, income: 0, expense: 0 }
+    );
+
+    setOverAllBalance([{ paid, unpaid, income, expense }]);
+  }, [data]);
+
+  // Handle Row Selection
+  const handleRowSelection = (newSelection: GridRowSelectionModel) => {
+    setSelectedRows(newSelection);
+  };
+
+  // Update Transactions
+  const updateTransactions = async (updateData: Partial<Transaction>) => {
+    if (selectedRows.length === 0) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Please select transactions to update",
+        background: "oklch(var(--b1))",
+        color: "oklch(var(--bc))",
+        confirmButtonColor: "oklch(var(--p))",
+      });
+      return;
+    }
+    const isConfirmed = await Swal.fire({
+      icon: "warning",
+      title: "Are you sure?",
+      text: "Do you want to update the selected transactions?",
+      showCancelButton: true,
+      confirmButtonText: "Update",
+      cancelButtonText: "Cancel",
+      background: "oklch(var(--b1))",
+      color: "oklch(var(--bc))",
+      confirmButtonColor: "oklch(var(--wa))",
+      cancelButtonColor: "oklch(var(--er))",
+    });
+
+    if (!isConfirmed.isConfirmed) return;
+
+    try {
+      const client = getClient();
+      const { error } = await client
+        .from("spending_tracker_db")
+        .update(updateData)
+        .in("id", selectedRows as string[]);
+
+      if (error) {
+        console.error(error);
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Failed to update transactions. Please try again.",
+          background: "oklch(var(--b1))",
+          color: "oklch(var(--bc))",
+          confirmButtonColor: "oklch(var(--p))",
+        });
+        return;
+      }
+
+      Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: "Transactions updated successfully",
+        background: "oklch(var(--b1))",
+        color: "oklch(var(--bc))",
+        timer: 2000,
+        timerProgressBar: true,
+        showConfirmButton: false,
+      });
+    } catch {
+      console.log("Error updating transactions");
+    } finally {
+      setIsLoading(false);
+      setSelectedRows([]);
+    }
+
+    fetchCurrMonthData();
+  };
+
+  // Delete Transactions
+  const deleteTransactions = async () => {
+    if (selectedRows.length === 0) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Please select transactions to delete",
+        background: "oklch(var(--b1))",
+        color: "oklch(var(--bc))",
+      });
+      return;
+    }
+    const isConfirmed = await Swal.fire({
+      icon: "warning",
+      title: "Are you sure?",
+      text: "Do you want to delete the selected transactions? This action cannot be undone.",
+      showCancelButton: true,
+      confirmButtonText: "Delete",
+      cancelButtonText: "Cancel",
+      background: "oklch(var(--b1))",
+      color: "oklch(var(--bc))",
+      confirmButtonColor: "oklch(var(--er))",
+      cancelButtonColor: "oklch(var(--wa))",
+    });
+
+    if (!isConfirmed.isConfirmed) return;
+
+    try {
+      setIsLoading(true);
+
+      const client = getClient();
+      const { error } = await client
+        .from("spending_tracker_db")
+        .delete()
+        .in("id", selectedRows as string[]);
+
+      if (error) {
+        console.error(error);
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Failed to delete transactions. Please try again.",
+          background: "oklch(var(--b1))",
+          color: "oklch(var(--bc))",
+          confirmButtonColor: "oklch(var(--p))",
+        });
+        return;
+      }
+
+      Swal.fire({
+        icon: "success",
+        title: "Deleted",
+        text: "Transactions deleted successfully",
+        background: "oklch(var(--b1))",
+        color: "oklch(var(--bc))",
+        timer: 2000,
+        timerProgressBar: true,
+        showConfirmButton: false,
+      });
+    } catch {
+      console.log("Error deleting transactions");
+    } finally {
+      setIsLoading(false);
+      setSelectedRows([]);
+    }
+
+    fetchCurrMonthData();
+  };
+
   return (
-    <div className="grid grid-cols-1 gap-4 pb-16">
-      <h1 className="text-xl font-bold">Track</h1>
+    <>
+      {isLoading && <Loading />}
+      <div className="grid grid-cols-1 gap-4 pb-16">
+        <h1 className="text-xl font-bold">Track</h1>
+        <Card balance={balance} />
 
-      <Card balance={balance} />
-
-      <div className="card">
-        <div className="card-body">
-          <div className="overflow-x-auto h-40 w-full">
-            <table className="table">
-              <thead>
-                <tr>
-                  <th>Amount</th>
-                  <th>Desc</th>
-                  <th>Income</th>
-                  <th>Categories</th>
-                  <th>Paid</th>
-                  <th>Remove</th>
-                </tr>
-              </thead>
-              <tbody>
-                {data.map((transaction: any, index: number) => (
-                  <tr key={index}>
-                    <td>{transaction.amount}</td>
-                    <td>{transaction.description}</td>
-                    <td
-                      className={`${
-                        transaction.is_income ? "text-success" : "text-error"
-                      }`}
-                    >
-                      {transaction.is_income ? "Income" : "Expense"}
-                    </td>
-                    <td>{transaction.category}</td>
-                    <td>
-                      <button
-                        onClick={() => {
-                          updatePaid(transaction.id);
-                        }}
-                        className="btn btn-sm btn-ghost"
-                      >
-                        {transaction.paid ? "Paid" : "Not Paid"}
-                      </button>
-                    </td>
-                    {/* remove */}
-                    <td>
-                      <button
-                        onClick={() => {
-                          deleteTransaction(transaction.id);
-                        }}
-                        className="btn btn-sm btn-ghost"
-                      >
-                        <Eraser color="oklch(var(--er))" />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+        <div className="text-xs opacity-50 font-semibold ml-auto">
+          Current Month: {dateRange}
+        </div>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
+          <BalanceItem
+            title="Income"
+            value={overAllBalance[0].income}
+            icon={TrendingUp}
+            color="bg-success"
+          />
+          <BalanceItem
+            title="Expense"
+            value={overAllBalance[0].expense}
+            icon={TrendingDown}
+            color="bg-error"
+          />
+          <BalanceItem
+            title="Paid"
+            value={overAllBalance[0].paid}
+            icon={CircleSlash}
+            color="bg-info"
+          />
+          <BalanceItem
+            title="Unpaid"
+            value={overAllBalance[0].unpaid}
+            icon={CircleX}
+            color="bg-warning"
+          />
+        </div>
+        <Table
+          data={data}
+          columns={columns}
+          handleRowSelection={handleRowSelection}
+          selectedRows={selectedRows}
+        />
+        <div className="flex ml-auto gap-1">
+          <button
+            className="btn btn-secondary btn-sm"
+            onClick={() => updateTransactions({ paid: true })}
+          >
+            Paid
+          </button>
+          <button
+            className="btn btn-secondary btn-sm"
+            onClick={() => updateTransactions({ paid: false })}
+          >
+            Unpaid
+          </button>
+          <button className="btn btn-error btn-sm" onClick={deleteTransactions}>
+            Delete
+          </button>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
-export default page;
+export default Page;
