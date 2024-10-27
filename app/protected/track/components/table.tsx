@@ -30,7 +30,7 @@ export default function table({
           color: "oklch(var(--bc))",
           fontWeight: "bold",
           border: "none",
-          height: 300,
+          height: 250,
           backgroundColor: "oklch(var(--b1))",
           borderRadius: "0.5rem",
           boxShadow: "0 0 1rem 0 rgba(0, 0, 0, 0.1)",

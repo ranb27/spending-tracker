@@ -96,41 +96,27 @@ function Page() {
   }, [user?.email]);
 
   //! Functions
-  // Balance
-  useEffect(() => {
-    const { income, expense } = data.reduce(
-      (acc, transaction) => {
-        if (transaction.is_income) {
-          acc.income += transaction.amount;
-        } else {
-          acc.expense += transaction.amount;
-        }
-        return acc;
-      },
-      { income: 0, expense: 0 }
-    );
-
-    setBalance(income - expense);
-  }, [data]);
 
   // OverAll Balance
   useEffect(() => {
     const { paid, unpaid, income, expense } = data.reduce(
       (acc, transaction) => {
         // Add to income or expense based on `is_income`
-        if (transaction.is_income) {
+        if (transaction.is_income && transaction.paid) {
           acc.income += transaction.amount;
-        } else {
+        } else if (!transaction.is_income) {
           acc.expense += transaction.amount;
-
-          // Only add to unpaid if it's not income
-          if (!transaction.paid) {
-            acc.unpaid += transaction.amount;
-          }
+        } else {
+          return acc;
         }
 
-        // Add to paid only if the transaction is paid (irrespective of income or expense)
-        if (transaction.paid) {
+        // Only add to unpaid & paid if it's not income
+        if (!transaction.paid) {
+          acc.unpaid += transaction.amount;
+        }
+
+        // Add to paid only if the transaction is paid for transactions that are not income
+        if (transaction.paid && !transaction.is_income) {
           acc.paid += transaction.amount;
         }
 
@@ -141,6 +127,12 @@ function Page() {
 
     setOverAllBalance([{ paid, unpaid, income, expense }]);
   }, [data]);
+
+  // Balance
+  useEffect(() => {
+    const balance = overAllBalance[0].income - overAllBalance[0].paid;
+    setBalance(balance);
+  }, [overAllBalance]);
 
   // Handle Row Selection
   const handleRowSelection = (newSelection: GridRowSelectionModel) => {
@@ -284,6 +276,147 @@ function Page() {
     fetchCurrMonthData();
   };
 
+  // Add this new function after other function declarations
+  const updateTransactionDetails = async () => {
+    if (selectedRows.length === 0) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Please select a transaction to update",
+        background: "oklch(var(--b1))",
+        color: "oklch(var(--bc))",
+        confirmButtonColor: "oklch(var(--p))",
+      });
+      return;
+    }
+
+    if (selectedRows.length > 1) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Please select only one transaction to update details",
+        background: "oklch(var(--b1))",
+        color: "oklch(var(--bc))",
+        confirmButtonColor: "oklch(var(--p))",
+      });
+      return;
+    }
+
+    // Get current transaction details
+    const currentTransaction = data.find(
+      (transaction) => transaction.id === selectedRows[0]
+    );
+
+    const { value: formValues } = await Swal.fire({
+      title: "Update Transaction",
+      html: `
+      <input
+        id="swal-description"
+        class="swal2-input"
+        placeholder="Description"
+        value="${currentTransaction?.description || ""}"
+      >
+      <input
+        id="swal-amount"
+        class="swal2-input"
+        type="number"
+        placeholder="Amount"
+        value="${currentTransaction?.amount || ""}"
+      >
+      <select id="swal-category" class="swal2-input">
+        ${
+          currentTransaction?.is_income
+            ? `
+          <option value="salary" ${currentTransaction?.category === "salary" ? "selected" : ""}>Salary</option>
+          <option value="bonus" ${currentTransaction?.category === "bonus" ? "selected" : ""}>Bonus</option>
+        `
+            : `
+          <option value="fixed cost" ${currentTransaction?.category === "fixed cost" ? "selected" : ""}>Fixed Cost</option>
+          <option value="credit" ${currentTransaction?.category === "credit" ? "selected" : ""}>Credit</option>
+          <option value="shopping" ${currentTransaction?.category === "shopping" ? "selected" : ""}>Shopping</option>
+        `
+        }
+        <option value="other" ${currentTransaction?.category === "other" ? "selected" : ""}>Other</option>
+      </select>
+    `,
+      focusConfirm: false,
+      showCancelButton: true,
+      confirmButtonText: "Update",
+      cancelButtonText: "Cancel",
+      background: "oklch(var(--b1))",
+      color: "oklch(var(--bc))",
+      confirmButtonColor: "oklch(var(--wa))",
+      cancelButtonColor: "oklch(var(--er))",
+      preConfirm: () => {
+        const description = (
+          document.getElementById("swal-description") as HTMLInputElement
+        ).value;
+        const amount = parseFloat(
+          (document.getElementById("swal-amount") as HTMLInputElement).value
+        );
+        const category = (
+          document.getElementById("swal-category") as HTMLSelectElement
+        ).value;
+
+        if (!description || !amount || !category) {
+          Swal.showValidationMessage("Please fill all fields");
+          return false;
+        }
+
+        return {
+          description,
+          amount,
+          category,
+        };
+      },
+    });
+
+    if (!formValues) return;
+
+    try {
+      setIsLoading(true);
+      const client = getClient();
+      const { error } = await client
+        .from("spending_tracker_db")
+        .update({
+          description: formValues.description,
+          amount: formValues.amount,
+          category: formValues.category,
+        })
+        .eq("id", selectedRows[0]);
+
+      if (error) {
+        throw error;
+      }
+
+      Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: "Transaction updated successfully",
+        background: "oklch(var(--b1))",
+        color: "oklch(var(--bc))",
+        timer: 2000,
+        timerProgressBar: true,
+        showConfirmButton: false,
+      });
+
+      fetchCurrMonthData();
+    } catch (error) {
+      console.error("Error updating transaction:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Failed to update transaction. Please try again.",
+        background: "oklch(var(--b1))",
+        color: "oklch(var(--bc))",
+        confirmButtonColor: "oklch(var(--p))",
+      });
+    } finally {
+      setIsLoading(false);
+      setSelectedRows([]);
+    }
+  };
+
   return (
     <>
       {isLoading && <Loading />}
@@ -338,6 +471,12 @@ function Page() {
             onClick={() => updateTransactions({ paid: false })}
           >
             Unpaid
+          </button>
+          <button
+            className="btn btn-secondary btn-sm"
+            onClick={updateTransactionDetails}
+          >
+            Edit Details
           </button>
           <button className="btn btn-error btn-sm" onClick={deleteTransactions}>
             Delete
