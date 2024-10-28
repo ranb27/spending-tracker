@@ -7,6 +7,7 @@ import { useUser } from "@/app/user";
 import { getClient } from "@/utils/supabase/client";
 import Loading from "@/components/ui/loading";
 import Swal from "sweetalert2";
+import { formatMonthYear } from "@/utils/format-date-time";
 
 type TransactionFormValues = {
   amount: number;
@@ -14,6 +15,7 @@ type TransactionFormValues = {
   category: string;
   is_income: boolean;
   user: string;
+  month_year: string;
 };
 
 function Page() {

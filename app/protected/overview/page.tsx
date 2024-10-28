@@ -1,6 +1,6 @@
 "use client";
 
-interface AnalystPage {
+interface OverAllPageProps {
   components: {
     // Trend analysis
     spendingTrends: {

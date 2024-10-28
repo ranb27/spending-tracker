@@ -19,6 +19,7 @@ export default function transactionTable({
               <th>Desc</th>
               <th>Income</th>
               <th>Categories</th>
+              <th>Date</th>
             </tr>
           </thead>
           <tbody>
@@ -32,6 +33,7 @@ export default function transactionTable({
                   {transaction.is_income ? "Income" : "Expense"}
                 </td>
                 <td>{transaction.category}</td>
+                <td>{transaction.month_year}</td>
                 {/* remove */}
                 <td>
                   <button

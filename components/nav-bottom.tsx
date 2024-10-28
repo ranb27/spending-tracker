@@ -30,8 +30,8 @@ const navItems = [
     icon: ScrollText,
   },
   {
-    name: "Analyst",
-    href: "/protected/analyst",
+    name: "Overview",
+    href: "/protected/overview",
     icon: ChartPie,
   },
   {

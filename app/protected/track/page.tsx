@@ -9,6 +9,7 @@ import { CircleSlash, CircleX, TrendingUp, TrendingDown } from "lucide-react";
 import Loading from "@/components/ui/loading";
 import Table from "./components/table";
 import BalanceItem from "./components/balance-item";
+import { formatMonthYear } from "@/utils/format-date-time";
 
 interface Transaction {
   id: string;
@@ -19,12 +20,16 @@ interface Transaction {
   is_income: boolean;
   user: string;
   category: string;
+  month_year: string;
 }
 
 function Page() {
   //! State
   const { user } = useUser();
   const [data, setData] = useState<Transaction[]>([]);
+  const [selectedMonth, setSelectedMonth] = useState<string>(
+    formatMonthYear(new Date())
+  );
   const [balance, setBalance] = useState<number>(0);
   const [overAllBalance, setOverAllBalance] = useState([
     {
@@ -36,12 +41,6 @@ function Page() {
   ]);
   const [selectedRows, setSelectedRows] = useState<GridRowSelectionModel>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  const now = new Date();
-  const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-  const lastDayOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-  //format DD-MM-YYYY
-  const dateRange = `${firstDayOfMonth.getDate()}-${firstDayOfMonth.getMonth() + 1}-${firstDayOfMonth.getFullYear()} to ${lastDayOfMonth.getDate()}-${lastDayOfMonth.getMonth() + 1}-${lastDayOfMonth.getFullYear()}`;
 
   const renderBoolean = (params: any) => {
     return (
@@ -79,8 +78,7 @@ function Page() {
       .from("spending_tracker_db")
       .select("*")
       .eq("user", user?.email)
-      .gte("created_at", firstDayOfMonth.toISOString())
-      .lte("created_at", lastDayOfMonth.toISOString());
+      .eq("month_year", formatMonthYear(new Date()));
 
     if (error) {
       console.error(error);
@@ -284,7 +282,7 @@ function Page() {
         <Card balance={balance} />
 
         <div className="text-xs opacity-50 font-semibold ml-auto">
-          Current Month: {dateRange}
+          {data[0]?.month_year}
         </div>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
           <BalanceItem
