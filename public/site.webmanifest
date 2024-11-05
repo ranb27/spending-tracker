@@ -1,6 +1,6 @@
 {
-  "name": "",
-  "short_name": "",
+  "name": "Spending Tracker",
+  "short_name": "Spending",
   "icons": [
     {
       "src": "/android-chrome-192x192.png",
