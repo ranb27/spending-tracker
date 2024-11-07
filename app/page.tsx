@@ -24,33 +24,27 @@ export default async function Index() {
                 Take control of your finances with our intuitive spending
                 tracker
               </p>
-              <div className="flex justify-center gap-4 mt-8">
-                <Link href="/protected/spend" target="_self" className="flex">
-                  <button className="py-2 px-4 text-sm active:scale-95 text-neutral-content bg-neutral rounded-full font-semibold hover:bg-info transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-2">
-                    Get Started <ArrowRight className="w-5 h-5" />
-                  </button>
-                </Link>
-              </div>
             </div>
 
-            {/* Features Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <FeatureCard
-                icon={<PiggyBank className="w-10 h-10 text-info" />}
-                title="Save Money"
-                description="Set budgets and track your savings goals with ease"
-              />
-              <FeatureCard
-                icon={<TrendingUp className="w-10 h-10 text-info" />}
-                title="Visualize Trends"
-                description="See your spending patterns with beautiful charts"
-              />
-              <FeatureCard
-                icon={<CreditCard className="w-10 h-10 text-info" />}
-                title="All Accounts"
-                description="Connect and monitor all your accounts in one place"
-              />
+            <div className="carousel w-full">{carousel()}</div>
+            <div className="flex w-full justify-center gap-2 py-2">
+              <a href="#item1" className="btn btn-xs">
+                1
+              </a>
+              <a href="#item2" className="btn btn-xs">
+                2
+              </a>
+              <a href="#item3" className="btn btn-xs">
+                3
+              </a>
             </div>
+          </div>
+          <div className="flex justify-center gap-4 mt-8">
+            <Link href="/protected/spend" target="_self" className="flex">
+              <button className="py-2 px-4 text-sm active:scale-95 text-neutral-content bg-neutral rounded-full font-semibold hover:bg-info transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-2">
+                Get Started <ArrowRight className="w-5 h-5" />
+              </button>
+            </Link>
           </div>
         </div>
       </main>
@@ -58,24 +52,45 @@ export default async function Index() {
   );
 }
 
-function FeatureCard({
-  icon,
-  title,
-  description,
-}: {
-  icon: JSX.Element;
-  title: string;
-  description: string;
-}) {
+function carousel() {
+  const carouselItems = [
+    {
+      id: "item1",
+      icon: <PiggyBank className="w-24 h-24 text-primary" />,
+      title: "Save Money Effortlessly",
+      description: "Set savings goals and track progress with ease.",
+    },
+    {
+      id: "item2",
+      icon: <TrendingUp className="w-24 h-24 text-primary" />,
+      title: "Monitor Spending Trends",
+      description: "View spending patterns to manage your budget better.",
+    },
+    {
+      id: "item3",
+      icon: <CreditCard className="w-24 h-24 text-primary" />,
+      title: "Manage Your Balance",
+      description: "Keep track of your income and expenses with ease.",
+    },
+  ];
+
   return (
-    <div className="w-full card bg-base-100 shadow-lg p-9 space-y-3 relative overflow-hidden group hover:scale-105 transition-all duration-300">
-      <div className="flex gap-2">
-        <div className="fill-info dark:fill-info/50 w-12 transform transition-transform duration-300 group-hover:scale-110">
-          {icon}
+    <div className="carousel mx-auto gap-4 h-auto rounded-lg shadow-lg">
+      {carouselItems.map((item) => (
+        <div
+          key={item.id}
+          id={item.id}
+          className="carousel-item w-full card bg-base-200"
+        >
+          <div className="card-body flex items-center space-x-4">
+            {item.icon}
+            <div>
+              <h2 className="font-bold text-xl">{item.title}</h2>
+              <p className="text-sm text-base-content/50">{item.description}</p>
+            </div>
+          </div>
         </div>
-        <h1 className="font-bold text-xl text-base-content my-auto">{title}</h1>
-      </div>
-      <p className="text-sm text-base-content/75 leading-6">{description}</p>
+      ))}
     </div>
   );
 }

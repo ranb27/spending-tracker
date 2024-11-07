@@ -148,7 +148,7 @@ export default function NavBottom({ user }: NavBottomProps) {
           <ThemeSwitcher />
         </div>
         <div className="divider"></div>
-        <MenuItem onClick={() => router.push("/")}>Home</MenuItem>
+        <MenuItem onClick={() => router.push("/")}>Main page</MenuItem>
         {user ? (
           <MenuItem
             onClick={() => signOutAction()}
