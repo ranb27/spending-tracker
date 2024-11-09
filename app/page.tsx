@@ -8,9 +8,9 @@ import Image from "next/image";
 export default async function Index() {
   return (
     <>
-      <main className="flex-1 flex flex-col h-full bg-gradient-to-br pt-12">
+      <main className="flex-1 flex flex-col h-full bg-gradient-to-br">
         <div className="flex-1 flex flex-col items-center justify-center px-4 my-8 sm:px-6 lg:px-8">
-          <div className="w-full max-w-4xl space-y-6">
+          <div className="w-full max-w-4xl space-y-4">
             {/* Hero Section */}
             <div className="text-center">
               <div className="relative">
@@ -36,15 +36,17 @@ export default async function Index() {
               </p>
             </div>
 
-            <div className="carousel w-full">{carousel()}</div>
+            <div className="carousel w-full shadow-lg rounded-xl">
+              {carousel()}
+            </div>
             <div className="flex w-full justify-center gap-2">
-              <a href="#item1" className="btn btn-xs">
+              <a href="#item1" className="btn btn-xs btn-circle btn-neutral">
                 1
               </a>
-              <a href="#item2" className="btn btn-xs">
+              <a href="#item2" className="btn btn-xs btn-circle btn-neutral">
                 2
               </a>
-              <a href="#item3" className="btn btn-xs">
+              <a href="#item3" className="btn btn-xs btn-circle btn-neutral">
                 3
               </a>
             </div>
@@ -52,7 +54,7 @@ export default async function Index() {
           <Link
             href="/protected/home"
             target="_self"
-            className="w-full flex justify-center mt-auto"
+            className="w-full flex justify-center mt-auto pt-4"
           >
             <button className="btn btn-accent w-full md:w-fit">
               Get Started <ArrowRight className="w-5 h-5" />
@@ -68,32 +70,32 @@ function carousel() {
   const carouselItems = [
     {
       id: "item1",
-      icon: <PiggyBank className="w-24 h-24 text-info" />,
+      icon: <PiggyBank className="w-16 h-16 text-info" />,
       title: "Save Money Effortlessly",
       description: "Set savings goals and track progress with ease.",
     },
     {
       id: "item2",
-      icon: <TrendingUp className="w-24 h-24 text-info" />,
+      icon: <TrendingUp className="w-16 h-16 text-info" />,
       title: "Monitor Spending Trends",
-      description: "View spending patterns to manage your budget better.",
+      description: "View spending patterns to manage your budget.",
     },
     {
       id: "item3",
-      icon: <CreditCard className="w-24 h-24 text-info" />,
+      icon: <CreditCard className="w-16 h-16 text-info" />,
       title: "Manage Your Balance",
-      description: "Keep track of your income and expenses with ease.",
+      description: "Keep track of your income and expenses.",
     },
   ];
 
   return (
-    <div className="carousel gap-4 w-full h-56 bg-base-200 rounded-xl">
+    <div className="carousel gap-2 w-full h-full py-2 bg-base-100">
       {carouselItems.map((item) => (
-        <div key={item.id} id={item.id} className="carousel-item w-full">
-          <div className="flex flex-col justify-center items-center mx-auto">
+        <div key={item.id} id={item.id} className="carousel-item w-full p-4">
+          <div className="flex flex-col">
             {item.icon}
 
-            <h2 className="font-bold text-xl">{item.title}</h2>
+            <h2 className="font-bold text-lg">{item.title}</h2>
             <p className="text-sm text-base-content/50">{item.description}</p>
           </div>
         </div>

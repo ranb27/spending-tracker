@@ -300,7 +300,7 @@ export default async function RootLayout({
         />
       </head>
 
-      <body className="bg-base-200/50 text-base-content">
+      <body className="bg-base-200 text-base-content">
         <UserProvider initialUser={user}>
           <ThemeProvider attribute="data-theme">
             <main className="min-h-screen flex flex-col items-center">
