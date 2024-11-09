@@ -6,6 +6,7 @@ import { getClient } from "@/utils/supabase/client";
 import Loading from "@/components/ui/loading";
 import Swal from "sweetalert2";
 import { formatMonthYear } from "@/utils/format-date-time";
+import { TicketMinus, TicketPlus } from "lucide-react";
 
 interface dataPostTransaction {
   description: string; // input text
@@ -99,6 +100,17 @@ export default function modalAdd() {
     }
   };
 
+  const handleClear = () => {
+    setDataPostTransaction({
+      description: "",
+      amount: null,
+      category: "",
+      is_income: false,
+      user: user?.email || "",
+      month_year: formatMonthYear(new Date()),
+    });
+  };
+
   return (
     <div>
       <dialog id="modal_add_tracnsaction" className="modal modal-top">
@@ -111,13 +123,22 @@ export default function modalAdd() {
 
           <div className="form-control w-full flex flex-row items-center">
             <label className="label">
-              <span className="label-text">Is income?</span>
+              <span className="label-text flex gap-2">
+                <p className="my-auto">
+                  {dataPostTransaction.is_income ? "Income" : "Expense"}
+                </p>
+                {dataPostTransaction.is_income ? (
+                  <TicketPlus color="oklch(var(--su))" />
+                ) : (
+                  <TicketMinus color="oklch(var(--er))" />
+                )}
+              </span>
             </label>
             <label className="cursor-pointer label ml-auto">
               <input
                 checked={dataPostTransaction.is_income}
                 type="checkbox"
-                className="toggle toggle-primary"
+                className="toggle toggle-success"
                 onChange={(e) => {
                   setDataPostTransaction({
                     ...dataPostTransaction,
@@ -128,7 +149,7 @@ export default function modalAdd() {
             </label>
           </div>
 
-          <div className="">
+          <div className="grid grid-cols-1">
             <label className="label">
               <span className="label-text">Description</span>
             </label>
@@ -221,22 +242,18 @@ export default function modalAdd() {
               Submit
             </button>
             <button
-              onClick={() => {
-                setDataPostTransaction({
-                  description: "",
-                  amount: null,
-                  category: "",
-                  is_income: false,
-                  user: user?.email || "",
-                  month_year: formatMonthYear(new Date()),
-                });
-              }}
+              onClick={handleClear}
               className="btn btn-xs text-primary btn-ghost"
             >
               Clear
             </button>
             <form method="dialog">
-              <button className="btn btn-xs text-error btn-ghost">Close</button>
+              <button
+                onClick={handleClear}
+                className="btn btn-xs text-error btn-ghost"
+              >
+                Close
+              </button>
             </form>
           </div>
         </div>

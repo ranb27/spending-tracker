@@ -36,9 +36,7 @@ export default async function Index() {
               </p>
             </div>
 
-            <div className="carousel w-full shadow-lg rounded-xl">
-              {carousel()}
-            </div>
+            <div className="carousel w-full">{carousel()}</div>
             <div className="flex w-full justify-center gap-2">
               <a href="#item1" className="btn btn-xs btn-circle btn-neutral">
                 1
@@ -70,33 +68,39 @@ function carousel() {
   const carouselItems = [
     {
       id: "item1",
-      icon: <PiggyBank className="w-16 h-16 text-info" />,
+      icon: (
+        <PiggyBank className="w-16 h-16 text-info bg-info/15 rounded-full p-2" />
+      ),
       title: "Save Money Effortlessly",
       description: "Set savings goals and track progress with ease.",
     },
     {
       id: "item2",
-      icon: <TrendingUp className="w-16 h-16 text-info" />,
+      icon: (
+        <TrendingUp className="w-16 h-16 text-info bg-info/15 rounded-full p-2" />
+      ),
       title: "Monitor Spending Trends",
       description: "View spending patterns to manage your budget.",
     },
     {
       id: "item3",
-      icon: <CreditCard className="w-16 h-16 text-info" />,
+      icon: (
+        <CreditCard className="w-16 h-16 text-info bg-info/15 rounded-full p-2" />
+      ),
       title: "Manage Your Balance",
       description: "Keep track of your income and expenses.",
     },
   ];
 
   return (
-    <div className="carousel gap-2 w-full h-full py-2 bg-base-100">
+    <div className="carousel w-full h-full bg-base-300/50 rounded-xl py-8">
       {carouselItems.map((item) => (
-        <div key={item.id} id={item.id} className="carousel-item w-full p-4">
-          <div className="flex flex-col">
+        <div key={item.id} id={item.id} className="carousel-item w-full">
+          <div className="w-full flex flex-col justify-center items-center">
             {item.icon}
 
-            <h2 className="font-bold text-lg">{item.title}</h2>
-            <p className="text-sm text-base-content/50">{item.description}</p>
+            <h2 className="font-semibold">{item.title}</h2>
+            <p className="text-xs text-base-content/50">{item.description}</p>
           </div>
         </div>
       ))}

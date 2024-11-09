@@ -4,7 +4,7 @@ import { usePathname, useRouter } from "next/navigation";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import {
-  House,
+  Landmark,
   History,
   CirclePlus,
   ChartNoAxesColumn,
@@ -29,7 +29,7 @@ const navItems = [
   {
     name: "Home",
     href: "/protected/home",
-    icon: House,
+    icon: Landmark,
     type: "path",
   },
   {
@@ -50,12 +50,6 @@ const navItems = [
     icon: ChartNoAxesColumn,
     type: "path",
   },
-  // {
-  //   name: "Account",
-  //   href: "#",
-  //   icon: User,
-  //   type: "button",
-  // },
 ];
 
 export default function NavBottom({ user }: NavBottomProps) {
