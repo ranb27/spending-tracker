@@ -1,7 +1,10 @@
 import React from "react";
 import { LineChart } from "@mui/x-charts/LineChart";
 
-export default function trend() {
+interface Props {
+  data: any;
+}
+export default function trend({ data }: Props) {
   return (
     <div>
       <LineChart
@@ -11,7 +14,7 @@ export default function trend() {
             data: [2, 5.5, 2, 8.5, 1.5, 5],
           },
         ]}
-        height={300}
+        height={250}
         colors={["oklch(var(--s))"]}
         leftAxis={null}
         margin={{ top: 0, right: 10, left: 10 }}

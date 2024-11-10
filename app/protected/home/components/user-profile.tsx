@@ -2,7 +2,11 @@ import React from "react";
 
 import { useUser } from "@/app/user";
 
-export default function userProfile() {
+interface Props {
+  data: any;
+}
+
+export default function userProfile({ data }: Props) {
   const { user } = useUser();
   return (
     <div className="flex gap-4">

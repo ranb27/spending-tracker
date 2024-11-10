@@ -13,7 +13,7 @@ interface dataPostTransaction {
   amount: number | null; // input number
   category: string; // select option
   is_income: boolean; // checkbox
-  user: string; // user?.email
+  user: string | null; // user?.email
   month_year: string; // formatMonthYear(new Date()) = YYYY-MM
 }
 
@@ -26,7 +26,7 @@ export default function modalAdd() {
       amount: null,
       category: "",
       is_income: false,
-      user: user?.email || "",
+      user: user?.email || null,
       month_year: formatMonthYear(new Date()),
     });
 
@@ -61,14 +61,7 @@ export default function modalAdd() {
         return;
       }
 
-      setDataPostTransaction({
-        description: "",
-        amount: 0,
-        category: "",
-        is_income: false,
-        user: "",
-        month_year: formatMonthYear(new Date()),
-      });
+      handleClear();
       const toast = Swal.mixin({
         toast: true,
         position: "top",
@@ -106,7 +99,7 @@ export default function modalAdd() {
       amount: null,
       category: "",
       is_income: false,
-      user: user?.email || "",
+      user: user?.email || null,
       month_year: formatMonthYear(new Date()),
     });
   };

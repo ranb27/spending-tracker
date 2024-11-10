@@ -41,6 +41,9 @@ export default function table({
             justifyContent: "center",
             bgcolor: "oklch(var(--b1))",
           },
+          "& .MuiDataGrid-scrollbarFiller": {
+            backgroundColor: "oklch(var(--b1))",
+          },
           "& .MuiDataGrid-columnHeaderTitle": {
             fontWeight: "bold",
             color: "oklch(var(--p))",
