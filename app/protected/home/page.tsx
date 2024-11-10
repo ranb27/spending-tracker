@@ -31,6 +31,9 @@ function page() {
   const { trigger } = useTriggerUpdate();
 
   //! State
+  const [selectMonth, setSelectMonth] = useState<string>(
+    formatMonthYear(new Date())
+  );
   const [data, setData] = useState<Transaction[]>([]);
 
   //! Fetch
@@ -41,6 +44,7 @@ function page() {
       .from("spending_tracker_db")
       .select("*")
       .eq("user", user?.email)
+      .eq("month_year", selectMonth)
       .order("created_at", { ascending: false });
 
     if (error) {
@@ -52,9 +56,7 @@ function page() {
 
   useEffect(() => {
     fetchData();
-  }, [user, trigger]);
-
-  console.log(data);
+  }, [user, trigger, selectMonth]);
 
   //! Function
 
@@ -62,9 +64,16 @@ function page() {
     <div className="grid grid-cols-1 mb-16 gap-4">
       <h1 className="font-bold">Home</h1>
       <div className="animate-fade-in">
-        <UserProfile data={data} />
-        <Balance data={data} />
-
+        <div className="grid gap-2">
+          <UserProfile data={data} />
+          <input
+            value={selectMonth}
+            type="month"
+            className="input input-bordered w-full input-sm md:input-disabled border-none"
+            onChange={(e) => setSelectMonth(e.target.value)}
+          />
+          <Balance data={data} />
+        </div>
         <div className="grid gap-1">
           <div className="divider divider-start font-bold">
             <h1 className="font-bold">Last Transaction</h1>

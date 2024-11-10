@@ -9,7 +9,7 @@ interface Props {
 export default function userProfile({ data }: Props) {
   const { user } = useUser();
   return (
-    <div className="flex gap-4">
+    <div className="flex gap-4 mb-2">
       <div className="avatar placeholder">
         <div className="ring-primary ring-offset-base-100 w-8 rounded-full ring ring-offset-2">
           <span className="text-xl">
