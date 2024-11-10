@@ -9,6 +9,7 @@ import NavBottom from "@/components/nav-bottom";
 import { Poppins } from "next/font/google";
 import { createClient } from "@/utils/supabase/server";
 import { UserProvider } from "./user";
+import { TriggerUpdateProvider } from "./context/trigger-update";
 
 import type { Metadata, Viewport } from "next";
 
@@ -303,17 +304,19 @@ export default async function RootLayout({
       <body className="bg-base-200 text-base-content">
         <UserProvider initialUser={user}>
           <ThemeProvider attribute="data-theme">
-            <main className="min-h-screen flex flex-col items-center">
-              <div className="flex-1 w-full flex flex-col gap-20 items-center">
-                <div className="flex flex-col gap-20 max-w-2xl p-5 w-full h-full min-h-screen">
-                  {children}
-                </div>
+            <TriggerUpdateProvider>
+              <main className="min-h-screen flex flex-col items-center">
+                <div className="flex-1 w-full flex flex-col gap-20 items-center">
+                  <div className="flex flex-col gap-20 max-w-2xl p-5 w-full h-full min-h-screen">
+                    {children}
+                  </div>
 
-                <footer className="w-full flex items-center justify-center mx-auto text-center text-xs gap-8 py-4 absolute bottom-4">
-                  {user ? <NavBottom user={user} /> : null}
-                </footer>
-              </div>
-            </main>
+                  <footer className="w-full flex items-center justify-center mx-auto text-center text-xs gap-8 py-4 absolute bottom-4">
+                    {user ? <NavBottom user={user} /> : null}
+                  </footer>
+                </div>
+              </main>
+            </TriggerUpdateProvider>
           </ThemeProvider>
         </UserProvider>
       </body>

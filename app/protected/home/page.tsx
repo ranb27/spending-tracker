@@ -6,6 +6,7 @@ import { getClient } from "@/utils/supabase/client";
 import Swal from "sweetalert2";
 import { formatMonthYear } from "@/utils/format-date-time";
 import { useUser } from "@/app/user";
+import { useTriggerUpdate } from "@/app/context/trigger-update";
 
 //! Components
 import UserProfile from "./components/user-profile";
@@ -27,6 +28,7 @@ interface Transaction {
 
 function page() {
   const { user } = useUser();
+  const { trigger } = useTriggerUpdate();
 
   //! State
   const [data, setData] = useState<Transaction[]>([]);
@@ -50,7 +52,7 @@ function page() {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [user, trigger]);
 
   console.log(data);
 

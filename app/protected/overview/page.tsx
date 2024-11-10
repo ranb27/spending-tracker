@@ -5,8 +5,9 @@ import Loading from "@/components/ui/loading";
 import { GridColDef } from "@mui/x-data-grid";
 import { getClient } from "@/utils/supabase/client";
 import { useUser } from "@/app/user";
-import { Pencil } from "lucide-react";
+import { Pencil, Trash } from "lucide-react";
 import { formatMonthYear } from "@/utils/format-date-time";
+import Swal from "sweetalert2";
 
 //! Components
 import Table from "./components/table";
@@ -34,7 +35,7 @@ function page() {
             }}
             className="btn btn-sm btn-ghost text-info"
           >
-            <Pencil size={16} />
+            <Pencil size={12} />
           </button>
         );
       },
@@ -74,6 +75,23 @@ function page() {
         return <div>{formatMonthYear(new Date(params.value))}</div>;
       },
     },
+    {
+      field: "delete",
+      headerName: "Del",
+      width: 60,
+      renderCell: (params: any) => {
+        return (
+          <button
+            onClick={() => {
+              handleDelete(params.row.id);
+            }}
+            className="btn btn-sm btn-error"
+          >
+            <Trash size={12} />
+          </button>
+        );
+      },
+    },
   ];
 
   //! Fetch
@@ -98,6 +116,53 @@ function page() {
   }, []);
 
   //! Function
+
+  const handleDelete = async (id: string) => {
+    //confirm
+    const isConfirmed = await Swal.fire({
+      title: `Are you sure? ID: ${id}`,
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "oklch(var(--p))",
+      cancelButtonColor: "oklch(var(--er))",
+      confirmButtonText: "Delete",
+      background: "oklch(var(--b1))",
+      color: "oklch(var(--bc))",
+    });
+
+    if (!isConfirmed.isConfirmed) {
+      return;
+    }
+
+    const client = getClient();
+    try {
+      await client.from("spending_tracker_db").delete().eq("id", id);
+      const toast = Swal.mixin({
+        toast: true,
+        position: "top",
+        showConfirmButton: false,
+        timer: 1500,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.addEventListener("mouseenter", Swal.stopTimer);
+          toast.addEventListener("mouseleave", Swal.resumeTimer);
+        },
+      });
+      toast.fire({
+        icon: "success",
+        title: "Transaction added successfully",
+        background: "oklch(var(--b1))",
+        color: "oklch(var(--bc))",
+        confirmButtonColor: "oklch(var(--p))",
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      await fetchData();
+    }
+  };
+
   return (
     <div className="grid grid-cols-1 gap-4 mb-16">
       <h1 className="font-bold">Overview</h1>

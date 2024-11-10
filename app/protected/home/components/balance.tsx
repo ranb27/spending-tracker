@@ -6,7 +6,8 @@ interface Props {
 
 export default function balance({ data }: Props) {
   const balance = data.reduce(
-    (acc: number, curr: { amount: number }) => acc + curr.amount,
+    (acc: number, curr: { amount: number; is_income: boolean }) =>
+      curr.is_income ? acc + curr.amount : acc - curr.amount,
     0
   );
 

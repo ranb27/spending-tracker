@@ -7,6 +7,7 @@ import Loading from "@/components/ui/loading";
 import Swal from "sweetalert2";
 import { formatMonthYear } from "@/utils/format-date-time";
 import { TicketMinus, TicketPlus } from "lucide-react";
+import { useTriggerUpdate } from "@/app/context/trigger-update";
 
 interface dataPostTransaction {
   description: string; // input text
@@ -19,6 +20,7 @@ interface dataPostTransaction {
 
 export default function modalAdd() {
   const { user } = useUser();
+  const { trigger, setTrigger } = useTriggerUpdate();
 
   const [dataPostTransaction, setDataPostTransaction] =
     useState<dataPostTransaction>({
@@ -90,6 +92,9 @@ export default function modalAdd() {
       if (modal) {
         modal.close();
       }
+
+      //trigger update
+      setTrigger(!trigger);
     }
   };
 
