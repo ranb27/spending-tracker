@@ -157,7 +157,7 @@ export default function modalAdd() {
               value={dataPostTransaction.description}
               type="text"
               placeholder="Enter description"
-              className="input input-bordered w-full input-sm"
+              className="input input-bordered w-full input-sm border-none"
               onChange={(e) => {
                 setDataPostTransaction({
                   ...dataPostTransaction,
@@ -173,7 +173,7 @@ export default function modalAdd() {
               value={dataPostTransaction.amount || ""}
               type="number"
               placeholder="Enter amount"
-              className="input input-bordered w-full input-sm"
+              className="input input-bordered w-full input-sm border-none"
               onChange={(e) => {
                 setDataPostTransaction({
                   ...dataPostTransaction,
@@ -190,7 +190,7 @@ export default function modalAdd() {
             <input
               value={dataPostTransaction.month_year}
               type="month"
-              className="input input-bordered w-full input-sm md:input-disabled"
+              className="input input-bordered w-full input-sm md:input-disabled border-none"
               onChange={(e) => {
                 setDataPostTransaction({
                   ...dataPostTransaction,
@@ -210,7 +210,7 @@ export default function modalAdd() {
                   category: e.target.value,
                 });
               }}
-              className="select w-full select-sm"
+              className="select w-full select-sm border-none"
             >
               {dataPostTransaction.category === "" && (
                 <option value="" disabled>
@@ -222,12 +222,14 @@ export default function modalAdd() {
                   <option value="salary">Salary</option>
                   <option value="bonus">Bonus</option>
                   <option value="gift">Gift</option>
+                  <option value="part time">Part Time</option>
                 </>
               ) : (
                 <>
                   <option value="fixed cost">Fixed Cost</option>
                   <option value="credit">Credit</option>
                   <option value="shopping">Shopping</option>
+                  <option value="investment">Investment</option>
                 </>
               )}
               <option value="other">Other</option>
