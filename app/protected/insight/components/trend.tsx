@@ -5,6 +5,8 @@ interface Props {
   data: any;
 }
 export default function trend({ data }: Props) {
+  console.log("data", data);
+
   return (
     <div>
       <LineChart
@@ -26,10 +28,10 @@ export default function trend({ data }: Props) {
             stroke: "oklch(var(--bc)) !important",
           },
           ".MuiChartsAxis-tick": {
-            stroke: "oklch(var(--bc)) !important",
+            stroke: "transparent !important",
           },
           ".MuiChartsAxis-line": {
-            stroke: "oklch(var(--bc)) !important",
+            stroke: "transparent !important",
           },
           ".css-1f57y8b": {
             fill: "oklch(var(--p)) !important",

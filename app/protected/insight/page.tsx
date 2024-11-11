@@ -4,14 +4,14 @@ import { useEffect, useState } from "react";
 import Loading from "@/components/ui/loading";
 import { GridColDef } from "@mui/x-data-grid";
 import { getClient } from "@/utils/supabase/client";
-import { useUser } from "@/app/user";
+import { useUser } from "@/app/context/user";
 import { Pencil, Trash } from "lucide-react";
 import { formatMonthYear } from "@/utils/format-date-time";
 import Swal from "sweetalert2";
+import Trend from "./components/trend";
 
 //! Components
 import Table from "./components/table";
-import PieChart from "./components/pie-chart";
 import TopSpend from "./components/top-spend";
 import ModalEdit from "./components/modal-edit";
 
@@ -165,14 +165,20 @@ function page() {
 
   return (
     <div className="grid grid-cols-1 gap-4 mb-16">
-      <h1 className="font-bold">Overview</h1>
+      <h1 className="font-bold">Insight</h1>
       <div className="animate-fade-in">
-        <PieChart />
         <div className="divider divider-start font-bold">Top Spend</div>
         <TopSpend />
         <div className="divider divider-start font-bold">Data Table</div>
 
         <Table data={data} columns={columns} />
+
+        <div className="grid gap-2">
+          <div className="divider divider-start font-bold">
+            <h1 className="font-bold">Trend</h1>
+          </div>
+          <Trend data={data} />
+        </div>
       </div>
 
       <ModalEdit />

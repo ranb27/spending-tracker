@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { getClient } from "@/utils/supabase/client";
-import { useUser } from "@/app/user";
+import { useUser } from "@/app/context/user";
 import { GridColDef, GridRowSelectionModel } from "@mui/x-data-grid";
 import Card from "./components/card";
 import Swal from "sweetalert2";

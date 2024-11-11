@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useUser } from "@/app/user";
+import { useUser } from "@/app/context/user";
 import { getClient } from "@/utils/supabase/client";
 import Loading from "@/components/ui/loading";
 import Swal from "sweetalert2";
@@ -31,8 +31,6 @@ export default function modalAdd() {
       user: user?.email || null,
       month_year: formatMonthYear(new Date()),
     });
-
-  console.log(dataPostTransaction);
 
   const handleSubmit = async () => {
     //require all fields

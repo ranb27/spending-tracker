@@ -1,6 +1,6 @@
 import React from "react";
 
-import { useUser } from "@/app/user";
+import { useUser } from "@/app/context/user";
 
 interface Props {
   data: any;

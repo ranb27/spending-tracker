@@ -8,7 +8,7 @@ import "./globals.css";
 import NavBottom from "@/components/nav-bottom";
 import { Poppins } from "next/font/google";
 import { createClient } from "@/utils/supabase/server";
-import { UserProvider } from "./user";
+import { UserProvider } from "./context/user";
 import { TriggerUpdateProvider } from "./context/trigger-update";
 
 import type { Metadata, Viewport } from "next";

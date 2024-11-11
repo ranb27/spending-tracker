@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import TransactionTable from "./components/transaction-table";
-import { useUser } from "@/app/user";
+import { useUser } from "@/app/context/user";
 import { getClient } from "@/utils/supabase/client";
 import Loading from "@/components/ui/loading";
 import Swal from "sweetalert2";

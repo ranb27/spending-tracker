@@ -6,7 +6,7 @@ interface Props {
   category: string;
   is_income: boolean;
 }
-export default function cardLast({
+export default function recently({
   description,
   amount,
   category,

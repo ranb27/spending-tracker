@@ -45,8 +45,8 @@ const navItems = [
     type: "button",
   },
   {
-    name: "Overview",
-    href: "/protected/overview",
+    name: "Insight",
+    href: "/protected/insight",
     icon: ChartNoAxesColumn,
     type: "path",
   },
