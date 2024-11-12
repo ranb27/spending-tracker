@@ -12,11 +12,11 @@ export default function balance({ data }: Props) {
   );
 
   return (
-    <div className="card bg-gradient-to-r from-primary to-secondary text-base-100 shadow-sm">
+    <div className="card bg-gradient-to-r from-primary to-secondary/75 text-base-100 shadow-sm">
       <div className="card-body">
-        <h2 className="font-semibold text-lg">Your Balance (THB)</h2>
+        <h2 className="font-semibold text-lg">Total balance</h2>
         <div className="flex justify-between">
-          <p className="menu-title text-base-100/50">Total available</p>
+          <p className="menu-title text-base-100/50">Available (THB)</p>
           <span
             className={`card-title text-3xl ${
               balance >= 0 ? "text-primary" : "text-error"

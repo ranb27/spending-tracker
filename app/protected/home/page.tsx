@@ -8,6 +8,7 @@ import { formatMonthYear } from "@/utils/format-date-time";
 import { useUser } from "@/app/context/user";
 import { useTriggerUpdate } from "@/app/context/trigger-update";
 import Link from "next/link";
+import { ArrowDownNarrowWide, ArrowUpNarrowWide } from "lucide-react";
 
 //! Components
 import UserProfile from "./components/user-profile";
@@ -35,6 +36,8 @@ function page() {
     formatMonthYear(new Date())
   );
   const [data, setData] = useState<Transaction[]>([]);
+  const [rencentlyData, setRecentlyData] = useState<Transaction[]>([]);
+  const [dataPercent, setDataPercent] = useState<number>(0);
 
   //! Fetch
   const fetchData = async () => {
@@ -54,11 +57,44 @@ function page() {
     setData(data);
   };
 
+  const fetchRecentlyData = async () => {
+    const client = getClient();
+
+    const { data, error } = await client
+      .from("spending_tracker_db")
+      .select("*")
+      .eq("user", user?.email)
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.error(error);
+      return;
+    }
+    setRecentlyData(data);
+  };
+
   useEffect(() => {
     fetchData();
+    fetchRecentlyData();
   }, [user, trigger, selectMonth]);
 
   //! Function
+  // Calculate Percentage
+  useEffect(() => {
+    if (data.length > 0) {
+      const totalAmount = data.reduce(
+        (acc, item) => (item.is_income === false ? acc + item.amount : acc),
+        0
+      );
+      const totalIncome = data.reduce(
+        (acc, item) => (item.is_income === true ? acc + item.amount : acc),
+        0
+      );
+
+      setDataPercent((totalAmount / totalIncome) * 100);
+    }
+  }, [data]);
+  console.log(dataPercent);
 
   return (
     <div className="grid grid-cols-1 mb-16 gap-4">
@@ -79,9 +115,9 @@ function page() {
             <h1 className="font-bold">Recently</h1>
           </div>
 
-          {data.length > 0 ? (
+          {rencentlyData.length > 0 ? (
             <ul className="timeline timeline-vertical timeline-compact">
-              {data.slice(0, 4).map((item, index) => (
+              {rencentlyData.slice(0, 4).map((item, index) => (
                 <li key={item.id}>
                   <div className="timeline-start text-xs opacity-75">
                     {new Date(item.created_at).toLocaleString()}
@@ -106,6 +142,7 @@ function page() {
                       amount={item.amount}
                       category={item.category}
                       is_income={item.is_income}
+                      month_year={item.month_year}
                     />
                   </div>
                   {index < 2 && <hr />}
@@ -124,9 +161,50 @@ function page() {
           ) : (
             <p className="text-center">No Transaction</p>
           )}
-        </div>
-        <div className="divider divider-start font-bold">
-          <h1 className="font-bold">Recorded</h1>
+
+          <div className="divider divider-start font-bold">
+            <h1 className="font-bold">Spend</h1>
+          </div>
+
+          <div className="text-center">
+            <div
+              className="radial-progress text-primary text-3xl font-bold bg-gradient-to-l from-secondary to-primary/75 border-4 border-secondary"
+              style={
+                {
+                  "--value": dataPercent > 100 ? 100 : dataPercent,
+                  "--size": "12rem",
+                } as React.CSSProperties
+              }
+              role="progressbar"
+            >
+              {dataPercent > 100 ? "> 100" : dataPercent.toFixed(0)}%
+            </div>
+
+            <div className="grid grid-cols-2 gap-2 mt-4">
+              <div className="flex justify-between items-center px-4 py-2 rounded-lg bg-base-100 shadow-sm">
+                <p className="text-base font-semibold text-success ">
+                  {data.reduce(
+                    (acc, item) => (item.is_income ? acc + item.amount : acc),
+                    0
+                  )}
+                </p>
+                <p className="text-success font-medium">
+                  <ArrowUpNarrowWide size={40} />
+                </p>
+              </div>
+              <div className="flex justify-between items-center px-4 py-2 rounded-lg bg-base-100 shadow-sm">
+                <p className="text-base font-semibold text-error">
+                  {data.reduce(
+                    (acc, item) => (item.is_income ? acc : acc + item.amount),
+                    0
+                  )}
+                </p>
+                <p className="text-error font-medium">
+                  <ArrowDownNarrowWide size={40} />
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
