@@ -13,9 +13,10 @@ export default function recently({
   is_income,
 }: Props) {
   return (
-    <div className="bg-base-100 rounded-lg p-2 flex gap-2 justify-between">
+    <div className="bg-base-100 rounded-lg flex gap-2 justify-between">
       <h2 className="text-xs my-auto">
-        {description} - {category}
+        <span className="font-semibold">{description}</span> -{" "}
+        {category.toUpperCase()}
       </h2>
       <div className="flex gap-2">
         <span
