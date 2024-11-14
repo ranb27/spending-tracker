@@ -8,6 +8,7 @@ import Swal from "sweetalert2";
 import { formatMonthYear, formatYear } from "@/utils/format-date-time";
 import { useUser } from "@/app/context/user";
 import { useTriggerUpdate } from "@/app/context/trigger-update";
+import ModalEdit from "./components/modal-edit";
 
 interface Transaction {
   id: string;
@@ -120,7 +121,9 @@ function Page() {
         ) : (
           Object.entries(groupedData).map(([monthYear, transactions]) => (
             <div key={monthYear} className="grid gap-2">
-              <div className="divider font-bold divider-start">{monthYear}</div>
+              <div className="divider font-bold divider-start">
+                <h1 className="font-bold menu-title">{monthYear}</h1>
+              </div>
               {transactions.map((transaction) => (
                 <CardHistory key={transaction.id} transaction={transaction} />
               ))}
@@ -128,6 +131,7 @@ function Page() {
           ))
         )}
       </div>
+      <ModalEdit />
     </div>
   );
 }

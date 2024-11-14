@@ -12,7 +12,7 @@ export default function balance({ data }: Props) {
   );
 
   return (
-    <div className="card bg-gradient-to-r from-primary to-secondary/75 text-base-100 shadow-sm">
+    <div className="card bg-gradient-to-r from-primary to-secondary/75 text-base-100 shadow-md">
       <div className="card-body">
         <h2 className="font-semibold text-lg">Total balance</h2>
         <div className="flex justify-between">

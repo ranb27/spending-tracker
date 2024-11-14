@@ -8,12 +8,12 @@ import { formatMonthYear } from "@/utils/format-date-time";
 import { useUser } from "@/app/context/user";
 import { useTriggerUpdate } from "@/app/context/trigger-update";
 import Link from "next/link";
-import { ArrowDownNarrowWide, ArrowUpNarrowWide } from "lucide-react";
 
 //! Components
 import UserProfile from "./components/user-profile";
 import Balance from "./components/balance";
 import Recently from "./components/recently";
+import Gauge from "./components/gauge";
 
 interface Transaction {
   id: string;
@@ -105,14 +105,20 @@ function page() {
           <input
             value={selectMonth}
             type="month"
-            className="input input-bordered w-full input-sm md:input-disabled border-none"
+            className="input input-bordered w-full input-sm md:input-disabled border-none shadow-md"
             onChange={(e) => setSelectMonth(e.target.value)}
           />
           <Balance data={data} />
         </div>
         <div className="grid gap-1">
           <div className="divider divider-start font-bold">
-            <h1 className="font-bold">Recently</h1>
+            <h1 className="font-bold menu-title">Spend</h1>
+          </div>
+
+          <Gauge data={data} dataPercent={dataPercent} />
+
+          <div className="divider divider-start font-bold">
+            <h1 className="font-bold menu-title">Recently</h1>
           </div>
 
           {rencentlyData.length > 0 ? (
@@ -161,50 +167,6 @@ function page() {
           ) : (
             <p className="text-center">No Transaction</p>
           )}
-
-          <div className="divider divider-start font-bold">
-            <h1 className="font-bold">Spend</h1>
-          </div>
-
-          <div className="text-center">
-            <div
-              className="radial-progress text-primary text-3xl font-bold bg-gradient-to-l from-secondary to-primary/75 border-4 border-secondary"
-              style={
-                {
-                  "--value": dataPercent > 100 ? 100 : dataPercent,
-                  "--size": "12rem",
-                } as React.CSSProperties
-              }
-              role="progressbar"
-            >
-              {dataPercent > 100 ? "> 100" : dataPercent.toFixed(0)}%
-            </div>
-
-            <div className="grid grid-cols-2 gap-2 mt-4">
-              <div className="flex justify-between items-center px-4 py-2 rounded-lg bg-base-100 shadow-sm">
-                <p className="text-base font-semibold text-success ">
-                  {data.reduce(
-                    (acc, item) => (item.is_income ? acc + item.amount : acc),
-                    0
-                  )}
-                </p>
-                <p className="text-success font-medium">
-                  <ArrowUpNarrowWide size={40} />
-                </p>
-              </div>
-              <div className="flex justify-between items-center px-4 py-2 rounded-lg bg-base-100 shadow-sm">
-                <p className="text-base font-semibold text-error">
-                  {data.reduce(
-                    (acc, item) => (item.is_income ? acc : acc + item.amount),
-                    0
-                  )}
-                </p>
-                <p className="text-error font-medium">
-                  <ArrowDownNarrowWide size={40} />
-                </p>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>
