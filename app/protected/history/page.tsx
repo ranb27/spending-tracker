@@ -8,7 +8,6 @@ import Swal from "sweetalert2";
 import { formatMonthYear, formatYear } from "@/utils/format-date-time";
 import { useUser } from "@/app/context/user";
 import { useTriggerUpdate } from "@/app/context/trigger-update";
-import ModalEdit from "./components/modal-edit";
 
 interface Transaction {
   id: string;
@@ -131,7 +130,6 @@ function Page() {
           ))
         )}
       </div>
-      <ModalEdit />
     </div>
   );
 }

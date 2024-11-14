@@ -25,9 +25,8 @@ export default function table({
           fontWeight: "bold",
           border: "none",
           height: 250,
-          backgroundColor: "oklch(var(--b1))",
+          backgroundColor: "transparent",
           borderRadius: "0.5rem",
-          boxShadow: "0 0 1rem 0 rgba(0, 0, 0, 0.1)",
           "& .MuiDataGrid-cell": {
             color: "oklch(var(--bc))",
             fontWeight: "bold",
@@ -36,17 +35,25 @@ export default function table({
           "& .MuiCheckbox-root": {
             color: "oklch(var(--p))",
           },
+          //MuiDataGrid-columnHeaderRow
+          "& .MuiDataGrid-columnHeaderRow": {
+            backgroundColor: "transparent",
+          },
+          "& .MuiDataGrid-topContainer": {
+            backgroundColor: "transparent",
+          },
+
           "& .MuiDataGrid-columnHeader": {
             alignItems: "center",
             justifyContent: "center",
-            bgcolor: "oklch(var(--b1))",
+            bgcolor: "transparent",
           },
           "& .MuiDataGrid-scrollbarFiller": {
-            backgroundColor: "oklch(var(--b1))",
+            backgroundColor: "transparent",
           },
           "& .MuiDataGrid-columnHeaderTitle": {
             fontWeight: "bold",
-            color: "oklch(var(--p))",
+            color: "oklch(var(--a))",
             fontSize: "12px",
             textAlign: "center",
             display: "flex",
@@ -54,7 +61,7 @@ export default function table({
             alignItems: "center",
           },
           "& .MuiDataGrid-overlay": {
-            backgroundColor: "oklch(var(--b1))",
+            backgroundColor: "transparent",
           },
           " & .MuiTablePagination-root": {
             color: "oklch(var(--bc))",
@@ -83,7 +90,7 @@ export default function table({
             fontWeight: "bold",
           },
           "& .MuiDataGrid-filler": {
-            backgroundColor: "oklch(var(--b1))",
+            backgroundColor: "transparent",
           },
           "& .MuiDataGrid-root": {
             border: "none",

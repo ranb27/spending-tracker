@@ -10,7 +10,7 @@ export default function TopSpend() {
   ];
 
   return (
-    <div className="card px-4">
+    <div className="card">
       <div className="grid gap-2">
         {topSpends.map((item, index) => (
           <div
