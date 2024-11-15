@@ -35,14 +35,12 @@ export default function table({
           "& .MuiCheckbox-root": {
             color: "oklch(var(--p))",
           },
-          //MuiDataGrid-columnHeaderRow
           "& .MuiDataGrid-columnHeaderRow": {
             backgroundColor: "transparent",
           },
           "& .MuiDataGrid-topContainer": {
             backgroundColor: "transparent",
           },
-
           "& .MuiDataGrid-columnHeader": {
             alignItems: "center",
             justifyContent: "center",
@@ -100,6 +98,9 @@ export default function table({
           },
           "& .MuiDataGrid-row": {
             border: "none",
+          },
+          "& .MuiDataGrid-row--borderBottom": {
+            backgroundColor: "transparent",
           },
         }}
       />

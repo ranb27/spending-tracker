@@ -24,7 +24,7 @@ export default async function Layout({
               d="M328 112L184 256l144 144"
             />
           </svg>
-          Home
+          Back
         </Link>
       </button>
       {children}

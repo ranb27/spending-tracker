@@ -18,6 +18,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Paper from "@mui/material/Paper";
 import ModalAdd from "./modal-add";
+import ModalEdit from "./modal-edit";
 
 interface NavBottomProps {
   user?: {
@@ -116,13 +117,22 @@ export default function NavBottom({ user }: NavBottomProps) {
               </div>
               <div className="divider"></div>
               <li>
+                <a
+                  onClick={() =>
+                    (
+                      document.getElementById("modal_edit") as HTMLDialogElement
+                    ).showModal()
+                  }
+                >
+                  Edit data
+                </a>
+              </li>
+              <li>
                 <Link href="/" className="">
                   Main page
                 </Link>
               </li>
-              {/* <li>
-              <a>Settings</a>
-            </li> */}
+
               <li className="text-error">
                 <a onClick={() => signOutAction()}>Sign Out</a>
               </li>
@@ -131,6 +141,7 @@ export default function NavBottom({ user }: NavBottomProps) {
         </div>
       </div>
       <ModalAdd />
+      <ModalEdit />
     </>
   );
 }

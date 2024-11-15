@@ -14,10 +14,10 @@ import { useTriggerUpdate } from "@/app/context/trigger-update";
 //! Components
 import Table from "./components/table";
 import TopSpend from "./components/top-spend";
-import ModalEdit from "./components/modal-edit";
 
 function page() {
   const { user } = useUser();
+  const { trigger } = useTriggerUpdate();
 
   //! State
   const [data, setData] = useState<[]>([]);
@@ -26,20 +26,20 @@ function page() {
       field: "description",
       headerName: "Description",
       width: 200,
-      renderCell: (params: any) => {
-        return (
-          <button
-            onClick={() => {
-              (
-                document.getElementById("modal_edit") as HTMLDialogElement
-              ).showModal();
-            }}
-            className="btn btn-sm btn-ghost text-info"
-          >
-            {params.value}
-          </button>
-        );
-      },
+      // renderCell: (params: any) => {
+      //   return (
+      //     <button
+      //       onClick={() => {
+      //         (
+      //           document.getElementById("modal_edit") as HTMLDialogElement
+      //         ).showModal();
+      //       }}
+      //       className="btn btn-sm btn-ghost text-info"
+      //     >
+      //       {params.value}
+      //     </button>
+      //   );
+      // },
     },
 
     {
@@ -67,23 +67,6 @@ function page() {
         return <div>{formatMonthYear(new Date(params.value))}</div>;
       },
     },
-    // {
-    //   field: "delete",
-    //   headerName: "Del",
-    //   width: 60,
-    //   renderCell: (params: any) => {
-    //     return (
-    //       <button
-    //         onClick={() => {
-    //           handleDelete(params.row.id);
-    //         }}
-    //         className="btn btn-sm btn-error"
-    //       >
-    //         <Trash size={12} />
-    //       </button>
-    //     );
-    //   },
-    // },
   ];
 
   //! Fetch
@@ -119,11 +102,11 @@ function page() {
           Top Spend
         </div>
         <TopSpend />
-        <div className="divider divider-start menu-title font-bold">
+        {/* <div className="divider divider-start menu-title font-bold">
           Data Table
         </div>
 
-        <Table data={data} columns={columns} />
+        <Table data={data} columns={columns} /> */}
 
         <div className="grid gap-2">
           <div className="divider divider-start font-bold">
@@ -132,8 +115,6 @@ function page() {
           <Trend data={data} />
         </div>
       </div>
-
-      <ModalEdit fetchData={fetchData} />
     </div>
   );
 }
