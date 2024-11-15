@@ -10,11 +10,11 @@ import { useUser } from "@/app/context/user";
 import { useTriggerUpdate } from "@/app/context/trigger-update";
 
 interface Transaction {
-  id: string;
+  id: number;
   created_at: string;
   description: string;
   amount: number;
-  paid: boolean;
+
   is_income: boolean;
   user: string;
   category: string;

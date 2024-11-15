@@ -16,7 +16,7 @@ interface Transaction {
   created_at: string;
   description: string;
   amount: number;
-  paid: boolean;
+
   is_income: boolean;
   user: string;
   category: string;

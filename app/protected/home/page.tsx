@@ -16,11 +16,11 @@ import Recently from "./components/recently";
 import Gauge from "./components/gauge";
 
 interface Transaction {
-  id: string;
+  id: number;
   created_at: string;
   description: string;
   amount: number;
-  paid: boolean;
+
   is_income: boolean;
   user: string;
   category: string;
