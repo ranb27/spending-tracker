@@ -20,7 +20,7 @@ export default function cardEdit({
   return (
     <div
       onClick={() => setCurrentId(id)}
-      className={`card bg-base-100 cursor-pointer min-w-64 border-4 ${currentId === id && is_income ? "border-success" : currentId === id && !is_income ? "border-error" : ""} duration-300`}
+      className={`card bg-base-100 cursor-pointer min-w-64 ${currentId === id && is_income ? "border-4 border-success" : currentId === id && !is_income ? "border-4 border-error" : ""} duration-300`}
     >
       <div className="card-body">
         <p className="menu-title">

@@ -58,6 +58,7 @@ function page() {
       .from("spending_tracker_db")
       .select("*")
       .eq("user", user?.email)
+      .eq("is_income", false)
       .like("month_year", `${selectYear}%`)
       .order("created_at", { ascending: false });
 
@@ -92,14 +93,12 @@ function page() {
 
   //sum("amount") group by category order by sum("amount") desc where is_income = false
   useEffect(() => {
-    const topSpend = data
-      .filter((transaction) => !transaction.is_income) // Filter where is_income is false
-      .reduce<Record<string, number>>((acc, transaction) => {
-        const { category, amount } = transaction;
-        if (!acc[category]) acc[category] = 0;
-        acc[category] += amount;
-        return acc;
-      }, {});
+    const topSpend = data.reduce<Record<string, number>>((acc, transaction) => {
+      const { category, amount } = transaction;
+      if (!acc[category]) acc[category] = 0;
+      acc[category] += amount;
+      return acc;
+    }, {});
 
     // Convert object to array of entries, sort by amount (descending), and map to desired format
     const sortedTopSpend: TopSpend[] = Object.entries(topSpend)
@@ -111,14 +110,15 @@ function page() {
 
   //dataTrend ["month_year" (xaxis), "amount" (yaxis)] --> sum("amount") where is_income = false group by month_year order by month_year asc
   useEffect(() => {
-    const trendDataMap = data
-      .filter((transaction) => !transaction.is_income) // Filter where is_income is false
-      .reduce<Record<string, number>>((acc, transaction) => {
+    const trendDataMap = data.reduce<Record<string, number>>(
+      (acc, transaction) => {
         const { month_year, amount } = transaction;
         if (!acc[month_year]) acc[month_year] = 0;
         acc[month_year] += amount;
         return acc;
-      }, {});
+      },
+      {}
+    );
 
     // Convert to array and sort by `month_year` (ascending)
     const sortedDataTrend: TrendData[] = Object.entries(trendDataMap)

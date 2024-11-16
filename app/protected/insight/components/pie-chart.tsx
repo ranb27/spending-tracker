@@ -30,7 +30,7 @@ export default function PieChartComponent({ data }: PieChartProps) {
           paddingAngle: 2.5,
           cornerRadius: 1,
           highlightScope: { fade: "global", highlight: "item" },
-          faded: { innerRadius: 50, additionalRadius: -25, color: "gray" },
+          faded: { innerRadius: 25, additionalRadius: -25, color: "gray" },
         },
       ]}
       height={150}
