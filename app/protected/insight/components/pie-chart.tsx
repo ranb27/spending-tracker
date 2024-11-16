@@ -33,9 +33,9 @@ export default function PieChartComponent({ data }: PieChartProps) {
           faded: { innerRadius: 50, additionalRadius: -25, color: "gray" },
         },
       ]}
-      height={300}
+      height={150}
       width={300}
-      margin={{ top: 0, right: 100, bottom: 0, left: 0 }}
+      margin={{ top: 0, right: 120, bottom: 0, left: 0 }}
       // slotProps={{ legend: { hidden: true } }}
       slotProps={{
         legend: {

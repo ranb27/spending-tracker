@@ -1,30 +1,29 @@
 import React from "react";
-import { LineChart } from "@mui/x-charts/LineChart";
+import { BarChart } from "@mui/x-charts/BarChart";
 
 interface TrendData {
   month_year: string;
   amount: number;
 }
-export default function trend({ data }: { data: TrendData[] }) {
-  console.log("data in trend comp", data);
+
+export default function barChart({ data }: { data: TrendData[] }) {
+  console.log("data in bar comp", data);
 
   const xData = data.map((item) => item.month_year);
   const yData = data.map((item) => item.amount);
-
   return (
-    <div>
-      <LineChart
-        xAxis={[{ data: xData }]}
+    <div className="card bg-base-100 p-4">
+      <BarChart
+        height={200}
         series={[
           {
             data: yData,
+            label: "Amount",
           },
         ]}
-        height={400} // Increased height
-        width={600} // Optionally specify a width
-        colors={["oklch(var(--s))"]}
+        slotProps={{ legend: { hidden: true } }}
         leftAxis={null}
-        margin={{ top: 0, right: 10, left: 10 }}
+        margin={{ top: 0, right: 20, bottom: 0, left: 20 }}
         sx={{
           ".MuiChartsAxis-tickLabel": {
             fill: "oklch(var(--bc)) !important",
@@ -41,6 +40,7 @@ export default function trend({ data }: { data: TrendData[] }) {
           ".css-1f57y8b": {
             fill: "oklch(var(--p)) !important",
           },
+
           ".MuiBarLabel-root": {
             fontWeight: "bold",
             fill: "oklch(var(--b1))",

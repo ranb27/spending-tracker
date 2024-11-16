@@ -99,7 +99,7 @@ function Page() {
       <h1 className="font-bold">History</h1>
       <div className="animate-fade-in grid gap-2">
         <select
-          className="select select-bordered w-full select-sm border-none"
+          className="select select-bordered w-full select-sm border-none shadow-md"
           value={selectYear}
           onChange={(e) => {
             setSelectYear(e.target.value);
