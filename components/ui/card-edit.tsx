@@ -27,7 +27,9 @@ export default function cardEdit({
           {category.charAt(0).toUpperCase() + category.slice(1)}
         </p>
         <p className="text-lg">{title}</p>
-        <p className="card-title mx-auto text-accent drop-shadow-sm">{value}</p>
+        <p className="card-title text-accent drop-shadow-sm flex w-full justify-center">
+          {value}
+        </p>
       </div>
     </div>
   );

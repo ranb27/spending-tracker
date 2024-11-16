@@ -8,66 +8,37 @@ import { useUser } from "@/app/context/user";
 import { Pencil, Trash } from "lucide-react";
 import { formatMonthYear } from "@/utils/format-date-time";
 import Swal from "sweetalert2";
-import Trend from "./components/trend";
 import { useTriggerUpdate } from "@/app/context/trigger-update";
 
 //! Components
-import Table from "./components/table";
 import TopSpend from "./components/top-spend";
+import Trend from "./components/trend";
+import PieChart from "./components/pie-chart";
+
+interface Transaction {
+  id: number;
+  created_at: string;
+  description: string;
+  amount: number;
+  is_income: boolean;
+  user: string;
+  category: string;
+  month_year: string;
+}
+
+interface TopSpend {
+  category: string;
+  amount: number;
+}
 
 function page() {
   const { user } = useUser();
   const { trigger } = useTriggerUpdate();
 
   //! State
-  const [data, setData] = useState<[]>([]);
-  const columns: GridColDef[] = [
-    {
-      field: "description",
-      headerName: "Description",
-      width: 200,
-      // renderCell: (params: any) => {
-      //   return (
-      //     <button
-      //       onClick={() => {
-      //         (
-      //           document.getElementById("modal_edit") as HTMLDialogElement
-      //         ).showModal();
-      //       }}
-      //       className="btn btn-sm btn-ghost text-info"
-      //     >
-      //       {params.value}
-      //     </button>
-      //   );
-      // },
-    },
-
-    {
-      field: "amount",
-      headerName: "Amount",
-      width: 150,
-      renderCell: (params: any) => {
-        return (
-          <div className="flex gap-2">
-            <span
-              className={`my-auto ${params.row.is_income ? "text-success" : "text-error"}`}
-            >
-              {params.value.toLocaleString()}
-            </span>
-            <p className="my-auto text-xs">THB</p>
-          </div>
-        );
-      },
-    },
-    {
-      field: "created_at",
-      headerName: "Month",
-      width: 150,
-      renderCell: (params: any) => {
-        return <div>{formatMonthYear(new Date(params.value))}</div>;
-      },
-    },
-  ];
+  const [data, setData] = useState<Transaction[]>([]);
+  const [top3Spend, setTop3Spend] = useState<TopSpend[]>([]);
+  const [topSpend, setTopSpend] = useState<TopSpend[]>([]);
 
   //! Fetch
   const fetchData = async () => {
@@ -88,9 +59,50 @@ function page() {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [user, trigger]);
 
   console.log("data", data);
+
+  //sum("amount") group by category order by sum("amount") desc limit 3
+  useEffect(() => {
+    const topSpend = data.reduce<Record<string, number>>((acc, transaction) => {
+      const { category, amount } = transaction;
+      if (!acc[category]) acc[category] = 0;
+      acc[category] += amount;
+      return acc;
+    }, {});
+
+    // Convert object to array of entries, sort by amount (descending), and map to desired format
+    const sortedTopSpend: TopSpend[] = Object.entries(topSpend)
+      .sort(([, a], [, b]) => b - a)
+      .slice(0, 3) // limit to 3
+      .map(([category, amount]) => ({ category, amount }));
+
+    setTop3Spend(sortedTopSpend); // Set as array of objects
+  }, [data, trigger]);
+
+  //sum("amount") group by category order by sum("amount") desc where is_income = false
+  useEffect(() => {
+    const topSpend = data
+      .filter((transaction) => !transaction.is_income) // Filter where is_income is false
+      .reduce<Record<string, number>>((acc, transaction) => {
+        const { category, amount } = transaction;
+        if (!acc[category]) acc[category] = 0;
+        acc[category] += amount;
+        return acc;
+      }, {});
+
+    // Convert object to array of entries, sort by amount (descending), and map to desired format
+    const sortedTopSpend: TopSpend[] = Object.entries(topSpend)
+      .sort(([, a], [, b]) => b - a)
+      .map(([category, amount]) => ({ category, amount }));
+
+    setTopSpend(sortedTopSpend); // Set as array of objects
+  }, [data, trigger]);
+
+  console.log("topSpend", topSpend);
+
+  //
 
   //! Function
 
@@ -99,14 +111,16 @@ function page() {
       <h1 className="font-bold">Insight</h1>
       <div className="animate-fade-in">
         <div className="divider divider-start menu-title font-bold">
-          Top Spend
+          Top 3 Category
         </div>
-        <TopSpend />
-        {/* <div className="divider divider-start menu-title font-bold">
-          Data Table
+        <div className="w-full flex justify-center">
+          <PieChart data={top3Spend} />
         </div>
 
-        <Table data={data} columns={columns} /> */}
+        <div className="divider divider-start menu-title font-bold">
+          Top Spend
+        </div>
+        <TopSpend data={topSpend} />
 
         <div className="grid gap-2">
           <div className="divider divider-start font-bold">

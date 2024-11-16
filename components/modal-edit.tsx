@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { getClient } from "@/utils/supabase/client";
 import Swal from "sweetalert2";
 import { formatMonthYear } from "@/utils/format-date-time";
@@ -52,7 +52,12 @@ export default function modalEdit() {
     fetchData();
   }, [trigger, selectMonth]);
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (id: number | null) => {
+    if (!id) {
+      alert("Please select a transaction");
+      return;
+    }
+
     //confirm
     const isConfirmed = window.confirm(
       `Are you sure? ID: ${id}\nYou won't be able to revert this!`
@@ -78,11 +83,12 @@ export default function modalEdit() {
       });
       toast.fire({
         icon: "success",
-        title: "Transaction added successfully",
+        title: "Transaction deleted successfully",
         background: "oklch(var(--b1))",
         color: "oklch(var(--bc))",
         confirmButtonColor: "oklch(var(--p))",
       });
+      setTrigger(!trigger);
     } catch (error) {
       console.error(error);
     } finally {
@@ -92,14 +98,7 @@ export default function modalEdit() {
 
   const handleUpdateAmount = async () => {
     if (!currentId || !amount) {
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "Please ensure all fields are filled!",
-        background: "oklch(var(--b1))",
-        color: "oklch(var(--bc))",
-        confirmButtonColor: "oklch(var(--p))",
-      });
+      alert("Please fill in all fields");
       return;
     }
 
@@ -134,34 +133,68 @@ export default function modalEdit() {
       setCurrentId(null);
 
       // Close modal
-      const modal = document.getElementById("modal_edit") as HTMLDialogElement;
-      modal.close();
+      // const modal = document.getElementById("modal_edit") as HTMLDialogElement;
+      // modal.close();
 
       // Refresh data
       fetchData();
       setTrigger(!trigger);
     } catch (error) {
       console.error(error);
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "Something went wrong!",
-        background: "oklch(var(--b1))",
-        color: "oklch(var(--bc))",
-        confirmButtonColor: "oklch(var(--p))",
-      });
+      alert(error);
     }
   };
 
-  console.log(data);
+  // console.log(data);
 
   const handleClear = () => {
     setAmount(null);
     setCurrentId(null);
   };
 
+  // Add state to track the middle card index
+  const [middleIndex, setMiddleIndex] = useState(0);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  // Function to calculate scale based on card position
+  const getCardStyle = (index: number) => {
+    // Calculate distance from middle (0 means it's the middle card)
+    const distanceFromMiddle = Math.abs(index - middleIndex);
+
+    // Scale formula: middle card is 1.25, cards get smaller as they get further from middle
+    const scale = Math.max(0.75, 1.05 - distanceFromMiddle * 0.15);
+    const opacity = Math.max(0.6, 1 - distanceFromMiddle * 0.2);
+
+    return {
+      transform: `scale(${scale})`,
+      opacity,
+      transition: "all 0.3s ease-in-out",
+    };
+  };
+
+  // Function to update middle card index based on scroll position
+  const handleScroll = () => {
+    if (!scrollContainerRef.current) return;
+
+    const container = scrollContainerRef.current;
+    const cardWidth = container.firstElementChild?.clientWidth || 0;
+    const scrollLeft = container.scrollLeft;
+    const newMiddleIndex = Math.round(scrollLeft / cardWidth);
+
+    setMiddleIndex(newMiddleIndex);
+  };
+
+  // Add scroll event listener
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (container) {
+      container.addEventListener("scroll", handleScroll);
+      return () => container.removeEventListener("scroll", handleScroll);
+    }
+  }, []);
+
   return (
-    <dialog id="modal_edit" className="modal modal-top">
+    <dialog id="modal_edit" className="modal modal-bottom md:modal-middle">
       <div className="modal-box bg-base-200">
         <h3 className="font-bold text-lg">
           <span className="text-primary">Edit Transaction</span>
@@ -180,18 +213,31 @@ export default function modalEdit() {
           <label htmlFor="" className="label">
             <span className="label-text-alt">Select Card</span>
           </label>
-          <div className="flex gap-2 w-full overflow-scroll p-4">
-            {data.map((item) => (
-              <CardEdit
+          <div
+            ref={scrollContainerRef}
+            className="flex w-full overflow-x-auto p-6 snap-x snap-mandatory scroll-smooth"
+            style={{
+              scrollbarWidth: "none", // Firefox
+              msOverflowStyle: "none", // IE/Edge
+              WebkitOverflowScrolling: "touch",
+            }}
+          >
+            {data.map((item, index) => (
+              <div
                 key={item.id}
-                id={item.id}
-                is_income={item.is_income}
-                title={item.description}
-                value={item.amount}
-                setCurrentId={setCurrentId}
-                currentId={currentId}
-                category={item.category}
-              />
+                className="snap-center flex-shrink-0"
+                style={getCardStyle(index)}
+              >
+                <CardEdit
+                  id={item.id}
+                  is_income={item.is_income}
+                  title={item.description}
+                  value={item.amount}
+                  setCurrentId={setCurrentId}
+                  currentId={currentId}
+                  category={item.category}
+                />
+              </div>
             ))}
           </div>
 
@@ -211,7 +257,7 @@ export default function modalEdit() {
         </div>
         <div className="modal-action">
           <button
-            onClick={() => handleDelete("")}
+            onClick={() => handleDelete(currentId)}
             className="btn btn-error btn-xs mr-auto"
           >
             Delete
@@ -229,7 +275,12 @@ export default function modalEdit() {
             Clear
           </button>
           <form method="dialog">
-            <button className="btn btn-xs btn-ghost text-error">Close</button>
+            <button
+              onClick={handleClear}
+              className="btn btn-xs btn-ghost text-error"
+            >
+              Close
+            </button>
           </form>
         </div>
       </div>

@@ -1,30 +1,49 @@
 import React from "react";
 
-export default function TopSpend() {
-  const topSpends = [
-    { name: "Groceries", amount: "฿150", percentage: "25%", icon: "🛒" },
-    { name: "Rent", amount: "฿800", percentage: "40%", icon: "🏠" },
-    { name: "Utilities", amount: "฿100", percentage: "10%", icon: "💡" },
-    { name: "Entertainment", amount: "฿80", percentage: "8%", icon: "🎬" },
-    { name: "Other", amount: "฿70", percentage: "17%", icon: "🔄" },
-  ];
+interface TopSpendData {
+  category: string;
+  amount: number;
+}
+
+interface TopSpendProps {
+  data: TopSpendData[];
+}
+
+export default function TopSpend({ data }: TopSpendProps) {
+  // Total sum of all amounts to calculate percentages
+  const totalAmount = data.reduce((sum, item) => sum + item.amount, 0);
+
+  // Mapping category to icons (optional; default fallback is 🔄)
+  const categoryIcons: Record<string, string> = {
+    "fixed cost": "💸",
+    credit: "💳",
+    shopping: "🛍️",
+    investment: "💼",
+    other: "🔄",
+  };
 
   return (
     <div className="card">
       <div className="grid gap-2">
-        {topSpends.map((item, index) => (
+        {data.map((item, index) => (
           <div
             key={index}
             className="flex items-center justify-between p-3 bg-base-100 rounded-lg hover:bg-base-300 transition"
           >
             <div className="flex items-center space-x-4">
-              <span className="text-2xl">{item.icon}</span>
+              <span className="text-2xl">
+                {categoryIcons[item.category] || "🔄"}
+              </span>
               <div>
-                <p className="font-semibold">{item.name}</p>
-                <p className="text-xs opacity-50">{item.percentage} of Total</p>
+                <p className="font-semibold">{item.category}</p>
+                <p className="text-xs opacity-50">
+                  {((item.amount / totalAmount) * 100).toFixed(2)}% of Total
+                </p>
               </div>
             </div>
-            <p className="text-lg font-semibold text-accent">{item.amount}</p>
+            <p className="text-lg font-semibold text-accent">
+              ฿{item.amount.toLocaleString()}
+            </p>
           </div>
         ))}
       </div>

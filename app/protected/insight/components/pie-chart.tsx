@@ -1,33 +1,52 @@
 import React from "react";
 import { PieChart } from "@mui/x-charts/PieChart";
 
-export default function pieChart() {
-  const data = [
-    { id: 0, value: 10, label: "series A" },
-    { id: 1, value: 15, label: "series B" },
-    { id: 2, value: 20, label: "series C" },
-    { id: 3, value: 10, label: "series D" },
-  ];
+interface PieChartData {
+  category: string;
+  amount: number;
+}
+
+interface PieChartProps {
+  data: PieChartData[];
+}
+
+export default function PieChartComponent({ data }: PieChartProps) {
+  // Transform the data into the format required by the PieChart
+  const chartData = data.map((item, index) => ({
+    id: index,
+    value: item.amount,
+    label: item.category,
+  }));
 
   return (
     <PieChart
       series={[
         {
-          data: data,
+          data: chartData,
           arcLabel: undefined,
           arcLabelMinAngle: 20,
-          arcLabelRadius: "75%",
-          innerRadius: 5,
+          arcLabelRadius: "50%",
+          innerRadius: 25,
           paddingAngle: 2.5,
           cornerRadius: 1,
-          // highlightScope: { fade: "global", highlight: "item" },
-          // faded: { innerRadius: 50, additionalRadius: -25, color: "gray" },
+          highlightScope: { fade: "global", highlight: "item" },
+          faded: { innerRadius: 50, additionalRadius: -25, color: "gray" },
         },
       ]}
-      height={150}
-      width={150}
-      margin={{ top: 0, right: 20, bottom: 0, left: 20 }}
-      slotProps={{ legend: { hidden: true } }}
+      height={300}
+      width={300}
+      margin={{ top: 0, right: 100, bottom: 0, left: 0 }}
+      // slotProps={{ legend: { hidden: true } }}
+      slotProps={{
+        legend: {
+          direction: "column",
+          position: { vertical: "middle", horizontal: "right" },
+          labelStyle: {
+            fontSize: 14,
+            fill: "oklch(var(--bc))",
+          },
+        },
+      }}
       sx={{
         ".MuiPieArc-root": {
           stroke: "none !important",

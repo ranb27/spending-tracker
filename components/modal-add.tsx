@@ -109,7 +109,7 @@ export default function modalAdd() {
 
   return (
     <div>
-      <dialog id="modal_add_tracnsaction" className="modal modal-top">
+      <dialog id="modal_add" className="modal modal-bottom md:modal-middle">
         <div className="modal-box bg-base-200">
           <h3 className="font-bold text-lg">
             <span className="text-primary">

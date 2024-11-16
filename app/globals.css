@@ -6,3 +6,19 @@ body {
   padding-top: env(safe-area-inset-top);
   background-color: oklch(var(--b1));
 }
+
+/* Hide or disable the modal backdrop */
+.modal::backdrop {
+  display: none;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.overflow-x-auto::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.overflow-x-auto {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}

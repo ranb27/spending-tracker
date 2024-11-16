@@ -56,7 +56,7 @@ const navItems = [
 export default function NavBottom({ user }: NavBottomProps) {
   return (
     <>
-      <div className="btm-nav pb-4">
+      <div className="btm-nav pb-4 shadow-inner">
         {navItems.map((item) => (
           <Link
             key={item.name}
@@ -65,9 +65,7 @@ export default function NavBottom({ user }: NavBottomProps) {
               item.type === "button" && item.name === "Add Transaction"
                 ? () =>
                     (
-                      document.getElementById(
-                        "modal_add_tracnsaction"
-                      ) as HTMLDialogElement
+                      document.getElementById("modal_add") as HTMLDialogElement
                     ).showModal()
                 : undefined
             }
@@ -80,7 +78,7 @@ export default function NavBottom({ user }: NavBottomProps) {
               strokeWidth={1.5}
               className={`${
                 item.name === "Add Transaction"
-                  ? "btn-neutral btn btn-circle"
+                  ? "btn-secondary text-base-100 btn btn-circle"
                   : ""
               }`}
             />
