@@ -102,7 +102,7 @@ function page() {
 
       setDataPercent((totalAmount / totalIncome) * 100);
     }
-  }, [data]);
+  }, [data, selectMonth]);
   console.log(dataPercent);
 
   return (
