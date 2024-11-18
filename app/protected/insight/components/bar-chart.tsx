@@ -24,9 +24,15 @@ export default function barChart({ data }: { data: TrendData[] }) {
           },
         ]}
         slotProps={{ legend: { hidden: true } }}
-        leftAxis={null}
+        // leftAxis={null}
         xAxis={[{ scaleType: "band", data: xData }]}
-        margin={{ top: 0, right: 20, bottom: 20, left: 20 }}
+        margin={{ top: 0, right: 20, bottom: 20, left: 50 }}
+        barLabel={(item, context) => {
+          const value = item.value ?? 0; // Fallback to 0 if item.value is null or undefined
+          return value > 10000
+            ? `${(value / 1000).toLocaleString()}k`
+            : value.toLocaleString();
+        }}
         sx={{
           ".MuiChartsAxis-tickLabel": {
             fill: "oklch(var(--bc)) !important",
