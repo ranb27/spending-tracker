@@ -32,6 +32,7 @@ function page() {
   const { trigger } = useTriggerUpdate();
 
   //! State
+  const [loading, setLoading] = useState<boolean>(true);
   const [selectMonth, setSelectMonth] = useState<string>(
     formatMonthYear(new Date())
   );
@@ -58,19 +59,27 @@ function page() {
   };
 
   const fetchRecentlyData = async () => {
-    const client = getClient();
+    try {
+      setLoading(true);
 
-    const { data, error } = await client
-      .from("spending_tracker_db")
-      .select("*")
-      .eq("user", user?.email)
-      .order("created_at", { ascending: false });
+      const client = getClient();
 
-    if (error) {
+      const { data, error } = await client
+        .from("spending_tracker_db")
+        .select("*")
+        .eq("user", user?.email)
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        console.error(error);
+        return;
+      }
+      setRecentlyData(data);
+    } catch (error) {
       console.error(error);
-      return;
+    } finally {
+      setLoading(false);
     }
-    setRecentlyData(data);
   };
 
   useEffect(() => {
@@ -99,6 +108,7 @@ function page() {
   return (
     <div className="grid grid-cols-1 mb-16 gap-4">
       <h1 className="font-bold">Home</h1>
+      {loading && <Loading />}
       <div className="animate-fade-in">
         <div className="grid gap-2">
           <UserProfile data={data} />

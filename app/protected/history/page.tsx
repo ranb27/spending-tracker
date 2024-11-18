@@ -26,6 +26,7 @@ function Page() {
   const { trigger } = useTriggerUpdate();
 
   //! State
+  const [loading, setLoading] = useState<boolean>(true);
   const [selectYear, setSelectYear] = useState<string>(formatYear(new Date()));
   const [yearOptions, setYearOptions] = useState<string[]>([]);
   const [groupedData, setGroupedData] = useState<{
@@ -61,32 +62,40 @@ function Page() {
 
   //! Fetch Data and Group by month_year
   const fetchData = async () => {
-    const client = getClient();
+    try {
+      setLoading(true);
 
-    const { data, error } = await client
-      .from("spending_tracker_db")
-      .select("*")
-      .eq("user", user?.email)
-      .like("month_year", `${selectYear}%`)
-      .order("created_at", { ascending: false });
+      const client = getClient();
 
-    if (error) {
+      const { data, error } = await client
+        .from("spending_tracker_db")
+        .select("*")
+        .eq("user", user?.email)
+        .like("month_year", `${selectYear}%`)
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        console.error(error);
+        return;
+      }
+
+      // Group transactions by month_year
+      const grouped = data.reduce(
+        (acc: { [key: string]: Transaction[] }, transaction: Transaction) => {
+          const { month_year } = transaction;
+          if (!acc[month_year]) acc[month_year] = [];
+          acc[month_year].push(transaction);
+          return acc;
+        },
+        {}
+      );
+
+      setGroupedData(grouped);
+    } catch (error) {
       console.error(error);
-      return;
+    } finally {
+      setLoading(false);
     }
-
-    // Group transactions by month_year
-    const grouped = data.reduce(
-      (acc: { [key: string]: Transaction[] }, transaction: Transaction) => {
-        const { month_year } = transaction;
-        if (!acc[month_year]) acc[month_year] = [];
-        acc[month_year].push(transaction);
-        return acc;
-      },
-      {}
-    );
-
-    setGroupedData(grouped);
   };
 
   useEffect(() => {
@@ -97,6 +106,7 @@ function Page() {
   return (
     <div className="grid grid-cols-1 gap-2 mb-16">
       <h1 className="font-bold">History</h1>
+      {loading && <Loading />}
       <div className="animate-fade-in grid gap-2">
         <select
           className="select select-bordered w-full select-sm border-none shadow-md"
@@ -115,20 +125,18 @@ function Page() {
           ))}
         </select>
 
-        {Object.keys(groupedData).length === 0 ? (
-          <Loading />
-        ) : (
-          Object.entries(groupedData).map(([monthYear, transactions]) => (
-            <div key={monthYear} className="grid gap-2">
-              <div className="divider font-bold divider-start">
-                <h1 className="font-bold menu-title">{monthYear}</h1>
+        {Object.keys(groupedData).length === 0
+          ? null
+          : Object.entries(groupedData).map(([monthYear, transactions]) => (
+              <div key={monthYear} className="grid gap-2">
+                <div className="divider font-bold divider-start">
+                  <h1 className="font-bold menu-title">{monthYear}</h1>
+                </div>
+                {transactions.map((transaction) => (
+                  <CardHistory key={transaction.id} transaction={transaction} />
+                ))}
               </div>
-              {transactions.map((transaction) => (
-                <CardHistory key={transaction.id} transaction={transaction} />
-              ))}
-            </div>
-          ))
-        )}
+            ))}
       </div>
     </div>
   );

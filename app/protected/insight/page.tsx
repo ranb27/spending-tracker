@@ -12,7 +12,6 @@ import { useTriggerUpdate } from "@/app/context/trigger-update";
 
 //! Components
 import TopSpend from "./components/top-spend";
-import Trend from "./components/trend";
 import PieChart from "./components/pie-chart";
 import BarChart from "./components/bar-chart";
 
@@ -42,6 +41,7 @@ function page() {
   const { trigger } = useTriggerUpdate();
 
   //! State
+  const [loading, setLoading] = useState<boolean>(true);
   const [selectYear, setSelectYear] = useState<string>(formatYear(new Date()));
   const [yearOptions, setYearOptions] = useState<string[]>([]);
 
@@ -52,21 +52,28 @@ function page() {
 
   //! Fetch
   const fetchData = async () => {
-    const client = getClient();
+    try {
+      setLoading(true);
+      const client = getClient();
+      const { data, error } = await client
+        .from("spending_tracker_db")
+        .select("*")
+        .eq("user", user?.email)
+        .eq("is_income", false)
+        .like("month_year", `${selectYear}%`)
+        .order("created_at", { ascending: false });
 
-    const { data, error } = await client
-      .from("spending_tracker_db")
-      .select("*")
-      .eq("user", user?.email)
-      .eq("is_income", false)
-      .like("month_year", `${selectYear}%`)
-      .order("created_at", { ascending: false });
+      if (error) {
+        console.error(error);
+        return;
+      }
 
-    if (error) {
+      setData(data);
+    } catch (error) {
       console.error(error);
-      return;
+    } finally {
+      setLoading(false);
     }
-    setData(data);
   };
 
   useEffect(() => {
@@ -160,6 +167,7 @@ function page() {
   return (
     <div className="grid grid-cols-1 gap-4 mb-16">
       <h1 className="font-bold">Insight</h1>
+      {loading && <Loading />}
       <div className="animate-fade-in">
         <select
           className="select select-bordered w-full select-sm border-none shadow-md"
@@ -192,7 +200,7 @@ function page() {
 
         <div className="grid gap-2">
           <div className="divider divider-start font-bold">
-            <h1 className="menu-title font-bold">Trend Jan-Dec</h1>
+            <h1 className="menu-title font-bold">Trend by Month</h1>
           </div>
           <BarChart data={dataTrend} />
         </div>

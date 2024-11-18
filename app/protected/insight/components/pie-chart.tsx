@@ -20,17 +20,22 @@ export default function PieChartComponent({ data }: PieChartProps) {
 
   return (
     <PieChart
+      colors={["oklch(var(--p))", "oklch(var(--s))", "oklch(var(--a))"]}
       series={[
         {
           data: chartData,
-          arcLabel: undefined,
-          arcLabelMinAngle: 20,
-          arcLabelRadius: "50%",
+          // arcLabel: (value: { value: number }): string => {
+          //   const val = value.value;
+          //   return val < 1000 ? val.toString() : `${(val / 1000).toFixed(1)}k`;
+          // },
+
+          arcLabelMinAngle: 35,
+          arcLabelRadius: "60%",
           innerRadius: 25,
           paddingAngle: 2.5,
           cornerRadius: 1,
-          highlightScope: { fade: "global", highlight: "item" },
-          faded: { innerRadius: 25, additionalRadius: -25, color: "gray" },
+          // highlightScope: { fade: "global", highlight: "item" },
+          // faded: { innerRadius: 25, additionalRadius: -25, color: "gray" },
         },
       ]}
       height={150}

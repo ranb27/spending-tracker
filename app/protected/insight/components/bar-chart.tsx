@@ -7,23 +7,26 @@ interface TrendData {
 }
 
 export default function barChart({ data }: { data: TrendData[] }) {
-  console.log("data in bar comp", data);
-
   const xData = data.map((item) => item.month_year);
   const yData = data.map((item) => item.amount);
+
+  // console.log("data in bar comp", xData);
+
   return (
-    <div className="card bg-base-100 p-4">
+    <div className="">
       <BarChart
-        height={200}
+        height={250}
         series={[
           {
             data: yData,
             label: "Amount",
+            color: "oklch(var(--s))",
           },
         ]}
         slotProps={{ legend: { hidden: true } }}
         leftAxis={null}
-        margin={{ top: 0, right: 20, bottom: 0, left: 20 }}
+        xAxis={[{ scaleType: "band", data: xData }]}
+        margin={{ top: 0, right: 20, bottom: 20, left: 20 }}
         sx={{
           ".MuiChartsAxis-tickLabel": {
             fill: "oklch(var(--bc)) !important",
