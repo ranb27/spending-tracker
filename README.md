@@ -1,96 +1,140 @@
-<a href="https://demo-nextjs-with-supabase.vercel.app/">
-  <img alt="Next.js and Supabase Starter Kit - the fastest way to build apps with Next.js and Supabase" src="https://demo-nextjs-with-supabase.vercel.app/opengraph-image.png">
-  <h1 align="center">Next.js and Supabase Starter Kit</h1>
-</a>
+# 💸 Spending Tracker
 
-<p align="center">
- The fastest way to build apps with Next.js and Supabase
-</p>
+A modern mobile-first Progressive Web App (PWA) for managing and tracking your finances effortlessly. Built with Next.js, styled with Tailwind CSS, and powered by Supabase for seamless database and API integration.
 
-<p align="center">
-  <a href="#features"><strong>Features</strong></a> ·
-  <a href="#demo"><strong>Demo</strong></a> ·
-  <a href="#deploy-to-vercel"><strong>Deploy to Vercel</strong></a> ·
-  <a href="#clone-and-run-locally"><strong>Clone and run locally</strong></a> ·
-  <a href="#feedback-and-issues"><strong>Feedback and issues</strong></a>
-  <a href="#more-supabase-examples"><strong>More Examples</strong></a>
-</p>
-<br/>
+## 🚀 Live Demo
 
-## Features
+👉 [Spending Tracker App](https://spending-tracker-ranb.vercel.app/)
 
-- Works across the entire [Next.js](https://nextjs.org) stack
-  - App Router
-  - Pages Router
-  - Middleware
-  - Client
-  - Server
-  - It just works!
-- supabase-ssr. A package to configure Supabase Auth to use cookies
-- Styling with [Tailwind CSS](https://tailwindcss.com)
-- Components with [shadcn/ui](https://ui.shadcn.com/)
-- Optional deployment with [Supabase Vercel Integration and Vercel deploy](#deploy-your-own)
-  - Environment variables automatically assigned to Vercel project
+### 🎉 Test Account & Registration
+```
+📝 Demo Account
+Email: test@ranb.com
+Password: test
+```
 
-## Demo
+🔐 **Personal Account Options:**
+1. **Self Registration**
+   - Open the app and click "Sign Up"
+   - Fill in your details
+   - Verify your email
+   - Start tracking your expenses!
 
-You can view a fully working demo at [demo-nextjs-with-supabase.vercel.app](https://demo-nextjs-with-supabase.vercel.app/).
+2. **Manual Account Setup**
+   - For additional features or custom setup
+   - Contact me via github
 
-## Deploy to Vercel
+⚠️ **Note**: The demo account is shared and regularly reset. For a personalized experience, please create your own account.
 
-Vercel deployment will guide you through creating a Supabase account and project.
+## 📱 Features
 
-After installation of the Supabase integration, all relevant environment variables will be assigned to the project so the deployment is fully functioning.
+- 📊 **Track Expenses**: Monitor your daily, weekly, and monthly spending with an intuitive UI
+- 🌐 **PWA Support**: Installable and optimized for mobile devices, offering a native app-like experience
+- 🔒 **Secure Authentication**: User sign-up and login powered by Supabase
+- 📂 **Cloud Sync**: All your data is securely stored and synced across devices
+- 🎨 **Customizable UI**: Themes powered by DaisyUI for a delightful experience
+- 📉 **Insights**: Visualize your spending trends with interactive charts
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fwith-supabase&project-name=nextjs-with-supabase&repository-name=nextjs-with-supabase&demo-title=nextjs-with-supabase&demo-description=This+starter+configures+Supabase+Auth+to+use+cookies%2C+making+the+user%27s+session+available+throughout+the+entire+Next.js+app+-+Client+Components%2C+Server+Components%2C+Route+Handlers%2C+Server+Actions+and+Middleware.&demo-url=https%3A%2F%2Fdemo-nextjs-with-supabase.vercel.app%2F&external-id=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fwith-supabase&demo-image=https%3A%2F%2Fdemo-nextjs-with-supabase.vercel.app%2Fopengraph-image.png)
+## 🛠️ Tech Stack
 
-The above will also clone the Starter kit to your GitHub, you can clone that locally and develop locally.
+### Frontend
+- **Framework**: Next.js with TypeScript
+- **Styling**: Tailwind CSS + DaisyUI for modular, customizable design
 
-If you wish to just develop locally and not deploy to Vercel, [follow the steps below](#clone-and-run-locally).
+### Backend
+- **Database**: Supabase (PostgreSQL)
+- **API**: REST APIs managed via Supabase
 
-## Clone and run locally
+### PWA
+- Built-in PWA capabilities with service workers for offline access and app installability
 
-1. You'll first need a Supabase project which can be made [via the Supabase dashboard](https://database.new)
+## 📱 PWA Installation Guide
 
-2. Create a Next.js app using the Supabase Starter template npx command
+### iOS Installation
+1. Open Safari browser and visit the app website
+2. Tap the Share button (📤) at the bottom of the browser
+3. Scroll down and tap "Add to Home Screen" (➕🏠)
+4. Choose a name for the app (or keep the default)
+5. Tap "Add" in the top right corner
+6. The app icon will appear on your home screen
 
-   ```bash
-   npx create-next-app -e with-supabase
-   ```
+**Note for iOS users**: 
+- PWA must be installed through Safari browser
+- Other browsers like Chrome on iOS won't show the install option
+- Updates are received when revisiting the web app in Safari
 
-3. Use `cd` to change into the app's directory
+### Android Installation
 
-   ```bash
-   cd name-of-new-app
-   ```
+#### Method 1: Chrome Browser
+1. Visit the app website in Chrome
+2. Wait for the "Add to Home Screen" banner to appear
+3. Tap "Install" or "Add to Home Screen"
+4. Follow the prompts to complete installation
 
-4. Rename `.env.example` to `.env.local` and update the following:
+#### Method 2: Manual Installation
+1. Open Chrome and visit the app website
+2. Tap the three dots (⋮) menu in the top right
+3. Select "Add to Home Screen"
+4. Choose a name (or keep default)
+5. Tap "Add"
 
-   ```
-   NEXT_PUBLIC_SUPABASE_URL=[INSERT SUPABASE PROJECT URL]
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=[INSERT SUPABASE PROJECT API ANON KEY]
-   ```
+**Note for Android users**:
+- Works best with Chrome browser
+- Other Chromium-based browsers (Edge, Opera) also support PWA installation
+- App updates are automatic when online
 
-   Both `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` can be found in [your Supabase project's API settings](https://app.supabase.com/project/_/settings/api)
+### Desktop Installation
 
-5. You can now run the Next.js local development server:
+#### Chrome
+1. Visit the app website
+2. Click the install icon (➕) in the address bar
+3. Click "Install"
 
-   ```bash
-   npm run dev
-   ```
+#### Edge
+1. Visit the app website
+2. Click the install icon (➕) in the address bar
+3. Click "Install"
 
-   The starter kit should now be running on [localhost:3000](http://localhost:3000/).
+#### Firefox
+1. Visit the app website
+2. Click the home icon in the address bar
+3. Click "Install"
 
-6. This template comes with the default shadcn/ui style initialized. If you instead want other ui.shadcn styles, delete `components.json` and [re-install shadcn/ui](https://ui.shadcn.com/docs/installation/next)
+### PWA Features
+- ✈️ **Offline Mode**: Access your data without internet
+- 🔄 **Auto Updates**: Always get the latest version
+- 📱 **Native Feel**: Full-screen experience without browser UI
+- 🔔 **Push Notifications**: Get important updates (optional)
+- 📲 **Quick Access**: Launch from home screen
+- 💾 **Storage**: Efficient data caching
+- 🔋 **Battery Efficient**: Optimized for mobile devices
 
-> Check out [the docs for Local Development](https://supabase.com/docs/guides/getting-started/local-development) to also run Supabase locally.
+### Troubleshooting Installation
 
-## Feedback and issues
+#### iOS Issues
+- **Can't find "Add to Home Screen"?**
+  - Make sure you're using Safari
+  - Refresh the page
+  - Clear Safari cache and try again
 
-Please file feedback and issues over on the [Supabase GitHub org](https://github.com/supabase/supabase/issues/new/choose).
+#### Android Issues
+- **Install button not appearing?**
+  - Check if Chrome is updated
+  - Clear browser cache
+  - Revisit the site after a few minutes
 
-## More Supabase examples
+#### General Tips
+- Ensure stable internet connection during installation
+- Check for adequate storage space
+- Keep your browser updated to latest version
+- If installation fails, try clearing browser cache and cookies
 
-- [Next.js Subscription Payments Starter](https://github.com/vercel/nextjs-subscription-payments)
-- [Cookie-based Auth and the Next.js 13 App Router (free course)](https://youtube.com/playlist?list=PL5S4mPUpp4OtMhpnp93EFSo42iQ40XjbF)
-- [Supabase Auth and the Next.js App Router](https://github.com/supabase/supabase/tree/master/examples/auth/nextjs)
+## 📚 Documentation
+
+- [Next.js Documentation](https://nextjs.org/docs)
+- [Supabase Documentation](https://supabase.io/docs)
+- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
+
+## 🌟 Support
+
+If you find this project helpful, please consider giving it a ⭐ on GitHub!
