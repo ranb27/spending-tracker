@@ -101,9 +101,10 @@ function page() {
       );
 
       setDataPercent((totalAmount / totalIncome) * 100);
+    } else {
+      setDataPercent(0);
     }
   }, [data, selectMonth]);
-  console.log(dataPercent);
 
   return (
     <div className="grid grid-cols-1 mb-16 gap-4">
