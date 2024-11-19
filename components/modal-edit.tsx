@@ -213,6 +213,7 @@ export default function modalEdit() {
           <label htmlFor="" className="label">
             <span className="label-text-alt">Select Card</span>
           </label>
+
           <div
             ref={scrollContainerRef}
             className="flex w-full overflow-x-auto p-6 snap-x snap-mandatory scroll-smooth"
@@ -239,12 +240,14 @@ export default function modalEdit() {
                 />
               </div>
             ))}
+
+            <p className="mx-auto">
+              {data.length === 0 && "No transactions found"}
+            </p>
           </div>
 
           <label htmlFor="" className="label">
-            <span className="label-text-alt">
-              Amount {currentId && `(${currentId})`}
-            </span>
+            <span className="label-text-alt">Amount</span>
           </label>
 
           <input
